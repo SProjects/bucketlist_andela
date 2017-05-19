@@ -13,8 +13,8 @@ class Config(object):
 class StagingConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SECRET_KEY = os.environ.get('SECRET_KEY', Config.SECRET_KEY)
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', None)
+    SECRET_KEY = os.getenv('SECRET_KEY') or Config.SECRET_KEY
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or None
 
 
 class DevelopmentConfig(Config):

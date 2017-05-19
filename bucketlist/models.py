@@ -12,7 +12,7 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text, nullable=False)
     done = db.Column(db.Boolean, default=True)
-    modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
+    modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone), onupdate=datetime.now(eat_timezone))
     created_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
     bucketlist_id = db.Column(db.Integer, db.ForeignKey('bucketlist.id'), nullable=False)
 
@@ -26,7 +26,7 @@ class Item(db.Model):
 class Bucketlist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300), nullable=False, index=True)
-    modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
+    modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone), onupdate=datetime.now(eat_timezone))
     created_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
     items = db.relationship('Item', backref='bucketlist')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -44,7 +44,7 @@ class User(db.Model):
     last_name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False, index=True)
     password_hash = db.Column(db.String)
-    modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
+    modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone), onupdate=datetime.now(eat_timezone))
     created_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
     bucketlists = db.relationship('Bucketlist', backref='user')
 
