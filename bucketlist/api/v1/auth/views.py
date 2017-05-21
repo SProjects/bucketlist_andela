@@ -11,11 +11,16 @@ class RegisterUser(Resource):
         parser.add_argument('last_name', type=str, help='Last name is required', required=True)
         parser.add_argument('email', type=str, help='Email is required', required=True)
         parser.add_argument('password', type=str, help='Password is required', required=True)
+        parser.add_argument('password_confirm', type=str, help='Password confirmation is required', required=True)
 
         arguments = parser.parse_args()
 
         first_name, last_name = arguments.get('first_name'), arguments.get('last_name')
         email, password = arguments.get('email'), arguments.get('password')
+        password_confirm = arguments.get('password_confirm')
+
+        if password != password_confirm:
+            return abort(401, message='Password and confirmation password don\'t match')
 
         try:
             if not User.exists(email):

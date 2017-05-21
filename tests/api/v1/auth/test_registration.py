@@ -13,7 +13,7 @@ class TestRegisterUser(TestCase, UnitTestCase):
         self.app = self.create_app()
         self.client = self.app.test_client
         self.user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@email.com',
-                          'password': 'test_password'}
+                          'password': 'test_password', 'password_confirm': 'test_password'}
 
         with self.app.app_context():
             bucketlist.db.session.close()
@@ -40,4 +40,11 @@ class TestRegisterUser(TestCase, UnitTestCase):
         result = json.loads(second_response.data.decode())
         self.assertEqual(result['message'], 'User already exists. Login.')
 
+    def test_user_registration_fails_with_401_error_is_password_and_password_confirmation_values_do_not_match(self):
+        user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@email.com',
+                     'password': 'test_password', 'password_confirm': 'different_test_password'}
 
+        response = self.client().post('/auth/register', data=user_data)
+
+        self.assertEqual(response.status_code, 401)
+        self.assertIn('Password and password confirmation don\'t match', response.data)

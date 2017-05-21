@@ -12,7 +12,7 @@ class TestAuthenticateUser(TestCase, UnitTestCase):
         self.app = self.create_app()
         self.client = self.app.test_client
         self.user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@email.com',
-                          'password': 'test_password'}
+                          'password': 'test_password', 'password_confirm': 'test_password'}
 
         with self.app.app_context():
             bucketlist.db.session.close()
