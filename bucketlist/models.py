@@ -1,4 +1,5 @@
 import pytz
+from flask import g
 
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -54,17 +55,37 @@ class User(db.Model):
 
     @password.setter
     def password(self, password):
-        self.password = generate_password_hash(password)
+        self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def _name(self):
+    @staticmethod
+    def verify_password(username, password):
+        user = User.query.filter_by(username=username).first()
+        if not user or not user.check_password(password):
+            return False
+        g.user = user
+        return True
+
+    @staticmethod
+    def exists(email):
+        return True if User.query.filter_by(email=email).first() else False
+
+    def name(self):
         return '{} {}'.format(self.last_name, self.first_name)
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def __repr__(self):
-        return '<User %r>' % self._name()
+        return '<User %r>' % self.name()
 
     def __str__(self):
-        return '{0}'.format(self._name())
+        return '{0}'.format(self.name())
 
