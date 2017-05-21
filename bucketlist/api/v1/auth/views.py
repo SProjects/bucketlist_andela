@@ -1,4 +1,4 @@
-from flask import make_response, jsonify
+from flask import g
 from flask_restful import reqparse, abort, Resource
 
 from bucketlist.models import User
@@ -31,5 +31,16 @@ class RegisterUser(Resource):
 
 
 class AuthenticateUser(Resource):
-    pass
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('email', type=str, help='Email is required', required=True)
+        parser.add_argument('password', type=str, help='Password is required', required=True)
+
+        arguments = parser.parse_args()
+        email, password = arguments.get('email'), arguments.get('password')
+
+        if User.validate(email, password):
+            return {'token': g.user.generate_token()}, 200
+        return abort(401, message='Wrong email or password combination. Try again.')
+
 
