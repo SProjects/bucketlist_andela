@@ -3,8 +3,11 @@ from flask import g
 
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
+                          BadSignature, SignatureExpired)
 
 from bucketlist import db
+from bucketlist.config import Config
 
 eat_timezone = pytz.timezone('Africa/Nairobi')
 
@@ -61,8 +64,8 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     @staticmethod
-    def verify_password(username, password):
-        user = User.query.filter_by(username=username).first()
+    def validate(email, password):
+        user = User.query.filter_by(email=email).first()
         if not user or not user.check_password(password):
             return False
         g.user = user
@@ -71,6 +74,22 @@ class User(db.Model):
     @staticmethod
     def exists(email):
         return True if User.query.filter_by(email=email).first() else False
+
+    def generate_token(self, expiration=600):
+        s = Serializer(Config.SECRET_KEY, expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_token(token):
+        s = Serializer(Config.SECRET_KEY)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None
+        except BadSignature:
+            return None
+        user = User.query.get(data.get('id'))
+        return user
 
     def name(self):
         return '{} {}'.format(self.last_name, self.first_name)
