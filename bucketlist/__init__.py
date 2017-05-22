@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_httpauth import HTTPBasicAuth
 
 from .config import configuration
 
 db = SQLAlchemy()
+auth = HTTPBasicAuth()
 
 
 def create_app(env_name):

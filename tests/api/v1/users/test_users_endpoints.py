@@ -1,4 +1,5 @@
 import json
+import base64
 from flask_testing import TestCase
 from unittest import TestCase as UnitTestCase
 
@@ -33,22 +34,28 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_returns_all_users(self):
         self.add_users()
-        response = self.client().get('/users')
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        response = self.client().get('/users',
+                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)
 
     def test_returns_empty_list_if_there_are_no_users(self):
-        response = self.client().get('/users')
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        response = self.client().get('/users',
+                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
         result = json.loads(response.data.decode())
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(result), 0)
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(result['message'], 'User does not exist.')
 
     def test_return_a_single_user_if_id_is_provided(self):
         self.add_users()
-        response = self.client().get('/users/1')
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        response = self.client().get('/users/1',
+                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -56,7 +63,9 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_fails_with_401_error_if_there_is_no_user_with_provided_id(self):
         self.add_users()
-        response = self.client().get('/users/20')
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        response = self.client().get('/users/20',
+                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
@@ -66,7 +75,9 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         self.add_users()
         self.assertEqual(len(User.query.all()), 2)
 
-        response = self.client().delete('/users/1')
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        response = self.client().delete('/users/1',
+                                        headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -75,9 +86,10 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_delete_endpoint_fails_with_401_error_if_there_is_no_user_with_the_provided_id(self):
         self.add_users()
-        response = self.client().delete('/users/20')
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        response = self.client().get('/users/20',
+                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result['message'], 'User with id#20 not found.')
-
