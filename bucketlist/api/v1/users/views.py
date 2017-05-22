@@ -3,6 +3,7 @@ from flask_restful import Resource, fields, marshal_with, marshal, abort
 from bucketlist.models import User
 
 user_fields = {
+    'id': fields.Integer,
     'first_name': fields.String,
     'last_name': fields.String,
     'email': fields.String
