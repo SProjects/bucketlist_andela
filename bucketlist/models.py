@@ -35,6 +35,14 @@ class Bucketlist(db.Model):
     items = db.relationship('Item', backref='bucketlist')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     def __repr__(self):
         return '<Bucketlist %r>' % self.name()
 
