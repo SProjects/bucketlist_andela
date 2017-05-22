@@ -1,0 +1,56 @@
+from flask_testing import TestCase
+
+import json
+import base64
+from unittest import TestCase as UnitTestCase
+
+import bucketlist
+from bucketlist.models import Bucketlist
+
+
+class TestBucketListEndpoints(TestCase, UnitTestCase):
+    def create_app(self):
+        return bucketlist.create_app('testing')
+
+    def authorization_headers(self):
+        login_credentials = '{}:{}'.format('first@email.com', 'test_password')
+        return {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
+
+    def token_headers(self, token):
+        login_credentials = '{}:{}'.format(token, 'unused_password')
+        return {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
+
+    def setUp(self):
+        self.app = self.create_app()
+        self.client = self.app.test_client
+        self.user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@email.com',
+                          'password': 'test_password', 'password_confirm': 'test_password'}
+        self.bucketlist_data = {'name': 'Bucket List Name'}
+
+        with self.app.app_context():
+            bucketlist.db.session.close()
+            bucketlist.db.drop_all()
+            bucketlist.db.create_all()
+
+    def tearDown(self):
+        bucketlist.db.session.remove()
+        bucketlist.db.drop_all()
+
+    def test_post_adds_new_bucketlist(self):
+        self.client().post('/auth/register', data=self.user_data)
+        login_credentials = dict(email=self.user_data.get('email'),
+                                 password=self.user_data.get('password'))
+        response = self.client().post('/auth/login', data=login_credentials)
+        result = json.loads(response.data.decode())
+        token = result['token']
+
+        response = self.client().post('/bucketlists?user_id=1', data=self.bucketlist_data,
+                                      headers=self.token_headers(token))
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(Bucketlist.query.all()), 1)
+        self.assertEqual(result['message'], 'Bucketlist created successfully.')
+
+    def test_get_returns_all_bucketlists_for_user(self):
+        pass
