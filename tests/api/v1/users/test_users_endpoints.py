@@ -17,6 +17,10 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         user_1.save()
         user_2.save()
 
+    def authorization_headers(self):
+        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
+        return {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
+
     def setUp(self):
         self.app = self.create_app()
         self.client = self.app.test_client
@@ -34,18 +38,14 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_returns_all_users(self):
         self.add_users()
-        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
-        response = self.client().get('/users',
-                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
+        response = self.client().get('/users', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)
 
     def test_returns_empty_list_if_there_are_no_users(self):
-        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
-        response = self.client().get('/users',
-                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
+        response = self.client().get('/users', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
@@ -53,9 +53,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_return_a_single_user_if_id_is_provided(self):
         self.add_users()
-        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
-        response = self.client().get('/users/1',
-                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
+        response = self.client().get('/users/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -63,9 +61,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_fails_with_401_error_if_there_is_no_user_with_provided_id(self):
         self.add_users()
-        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
-        response = self.client().get('/users/20',
-                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
+        response = self.client().get('/users/20', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
@@ -75,9 +71,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         self.add_users()
         self.assertEqual(len(User.query.all()), 2)
 
-        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
-        response = self.client().delete('/users/1',
-                                        headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
+        response = self.client().delete('/users/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -86,9 +80,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_delete_endpoint_fails_with_401_error_if_there_is_no_user_with_the_provided_id(self):
         self.add_users()
-        login_credentials = '{}:{}'.format('first1@email.com', 'test_password')
-        response = self.client().get('/users/20',
-                                     headers={'Authorization': 'Basic ' + base64.b64encode(login_credentials)})
+        response = self.client().get('/users/20', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
