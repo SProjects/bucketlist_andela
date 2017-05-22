@@ -94,6 +94,10 @@ class User(db.Model):
     def name(self):
         return '{} {}'.format(self.last_name, self.first_name)
 
+    @staticmethod
+    def get_all():
+        return User.query.all()
+
     def save(self):
         db.session.add(self)
         db.session.commit()
