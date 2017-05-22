@@ -45,6 +45,7 @@ class TestRegisterUser(TestCase, UnitTestCase):
                      'password': 'test_password', 'password_confirm': 'different_test_password'}
 
         response = self.client().post('/auth/register', data=user_data)
+        result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
-        self.assertIn('Password and password confirmation don\'t match', response.data)
+        self.assertEqual(result['message'], 'Password and confirmation password don\'t match')
