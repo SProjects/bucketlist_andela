@@ -21,10 +21,10 @@ class Item(db.Model):
     bucketlist_id = db.Column(db.Integer, db.ForeignKey('bucketlist.id'), nullable=False)
 
     def __repr__(self):
-        return '<Item %r>' % self.name()
+        return '<Item %r>' % self.name
 
     def __str__(self):
-        return '{0}'.format(self.name())
+        return '{0}'.format(self.name)
 
 
 class Bucketlist(db.Model):
@@ -44,10 +44,10 @@ class Bucketlist(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return '<Bucketlist %r>' % self.name()
+        return '<Bucketlist %r>' % self.name
 
     def __str__(self):
-        return '{0}'.format(self.name())
+        return '{0}'.format(self.name)
 
 
 class User(db.Model):
