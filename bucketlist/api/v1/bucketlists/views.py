@@ -54,8 +54,18 @@ class BucketListEndpoint(Resource):
 class BucketLists(Resource):
     @auth.login_required
     def get(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('q', type=str, help='Search term is missing.', required=False)
+        arguments = parser.parse_args()
+        search_term = arguments.get('q', None)
+
         current_user = g.user
         if current_user:
+            if search_term is not None:
+                bucketlists = Bucketlist.query.filter(Bucketlist.name.like('%' + search_term + '%'),
+                                                      Bucketlist.user == current_user).all()
+                return marshal(bucketlists, bucketlist_fields), 200
+            
             bucketlists = Bucketlist.query.filter_by(user=current_user).all()
             return marshal(bucketlists, bucketlist_fields), 200
         else:

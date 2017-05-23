@@ -107,3 +107,18 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 successfully deleted.')
         self.assertEqual(len(Bucketlist.query.all()), 2)
 
+    def test_search_returns_bucketlists_whose_name_matches_a_search_term(self):
+        self.client().post('/auth/register', data=self.user_data)
+        self.add_bucketlists()
+
+        response = self.client().get('/bucketlists?q=Bucketlist', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(result), 3)
+
+        response = self.client().get('/bucketlists?q=One', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(result), 1)
