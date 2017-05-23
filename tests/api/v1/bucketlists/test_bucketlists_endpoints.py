@@ -79,3 +79,18 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertListEqual(sorted([str(key) for key in result.keys()]), expected_list)
         self.assertListEqual([result.get('name'), result.get('created_by')], ['Bucketlist One', 1])
+
+    def test_edit_updates_bucketlist_fields(self):
+        self.client().post('/auth/register', data=self.user_data)
+        self.add_bucketlists()
+        response = self.client().get('/bucketlists/1', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(result.get('name'), 'Bucketlist One')
+
+        update_fields = {'name': 'Visit Bali'}
+        response = self.client().put('/bucketlists/1', data=update_fields, headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result.get('name'), update_fields.get('name'))

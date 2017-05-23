@@ -2,7 +2,7 @@ from flask import g
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
 
 from bucketlist import auth
-from bucketlist.models import User, Bucketlist
+from bucketlist.models import Bucketlist
 from ..items.views import item_fields
 
 bucketlist_fields = {
@@ -25,8 +25,21 @@ class BucketListEndpoint(Resource):
             return bucketlist, 200
         abort(403, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
 
+    @auth.login_required
+    @marshal_with(bucketlist_fields)
     def put(self, bucketlist_id):
-        pass
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, help='Bucketlist name is required', required=True)
+        arguments = parser.parse_args()
+        name = arguments.get('name')
+
+        bucketlist = Bucketlist.query.get(bucketlist_id)
+        if bucketlist:
+            bucketlist.name = name
+            bucketlist.save()
+            return bucketlist, 200
+        else:
+            abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
 
     def delete(self, bucketlist_id):
         pass
