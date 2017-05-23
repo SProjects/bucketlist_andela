@@ -85,3 +85,21 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
         actual_results = [result.get('name'), result.get('done')]
         self.assertListEqual(actual_results, ['ToDo One', False])
 
+    def test_edit_updates_an_item_of_a_bucketlist(self):
+        self.add_user()
+        self.add_bucketlists()
+        self.add_items()
+
+        response = self.client().get('/bucketlists/1/items/1', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+        actual_results = [result.get('name'), result.get('done')]
+        self.assertListEqual(actual_results, ['ToDo One', False])
+
+        update_item_fields = {'name': 'Updated ToDo Item', 'done': True}
+        response = self.client().put('/bucketlists/1/items/1', data=update_item_fields,
+                                     headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        actual_results = [result.get('name'), result.get('done')]
+        self.assertListEqual(actual_results, ['Updated ToDo Item', True])

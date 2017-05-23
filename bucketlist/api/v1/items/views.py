@@ -22,8 +22,26 @@ class ItemEndpoint(Resource):
             return item, 200
         abort(400, message='Item with ID#{} not found.'.format(item_id))
 
+    @auth.login_required
+    @marshal_with(item_fields)
     def put(self, bucketlist_id, item_id):
-        pass
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, help='Item name is required', required=True)
+        parser.add_argument('done', type=str, help='Item status', required=False)
+        arguments = parser.parse_args()
+        name, done = arguments.get('name'), arguments.get('done', False)
+
+        bucketlist = Bucketlist.query.get(bucketlist_id)
+        item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
+        if item:
+            try:
+                item.name = name
+                item.done = done
+                item.save()
+                return item, 200
+            except Exception as e:
+                return abort(400, message='Failed to update item -> {}'.format(e.message))
+        abort(400, message='Item with ID#{} not found.'.format(item_id))
 
     def delete(self, bucketlist_id, item_id):
         pass
