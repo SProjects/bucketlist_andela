@@ -5,12 +5,20 @@ import base64
 from unittest import TestCase as UnitTestCase
 
 import bucketlist
-from bucketlist.models import Bucketlist
+from bucketlist.models import Bucketlist, User
 
 
 class TestBucketListEndpoints(TestCase, UnitTestCase):
     def create_app(self):
         return bucketlist.create_app('testing')
+
+    def add_bucketlists(self):
+        bucketlist_1 = Bucketlist(name='Bucketlist One', user_id=1)
+        bucketlist_2 = Bucketlist(name='Bucketlist Two', user_id=1)
+        bucketlist_3 = Bucketlist(name='Bucketlist Three', user_id=1)
+        bucketlist_1.save()
+        bucketlist_2.save()
+        bucketlist_3.save()
 
     def authorization_headers(self):
         login_credentials = '{}:{}'.format('first@email.com', 'test_password')
@@ -53,4 +61,10 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(result['message'], 'Bucketlist created successfully.')
 
     def test_get_returns_all_bucketlists_for_user(self):
-        pass
+        self.client().post('/auth/register', data=self.user_data)
+        self.add_bucketlists()
+        response = self.client().get('/bucketlists?user_id=1', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(result), 3)
