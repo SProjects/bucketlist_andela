@@ -104,7 +104,7 @@ authentication
 *Edit a bucketlist*
 > Url: ``http://<base_url>/bucketlists/<bucketlist_id>`` 
 > Action: ``PUT`` 
-> Data  
+> Data
 > ``
 > {'name': 'Bucketlist Name'}
 > `` 
@@ -117,12 +117,17 @@ authentication
 > Action: ``DELETE`` 
 > Authorization: True 
 
+*Search bucketlists by name*
+> Url: ``http://<base_url>/bucketlists?q=<search_term>`` 
+> Action: ``GET`` 
+> Authorization: True 
+
 **Bucketlist Item Endpoints**
 
-*Add new bucketlist*
+*Add new bucketlist item*
 > Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items`` 
 > Action: ``POST`` 
-> Data  
+> Data
 > ``
 > {'name': 'Item Name'}
 > `` 
@@ -130,17 +135,17 @@ authentication
 > ``{'message': 'Item successfully added to Bucketlist ID#<bucketlist_id>'}`` 
 > Authorization: True 
 
-*Get all bucketlists*
+*Get all bucketlist items*
 > Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items`` 
 > Action: ``GET`` 
 > Authorization: True 
 
-*Get a bucketlist*
+*Get a bucketlist item*
 > Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``GET`` 
 > Authorization: True 
 
-*Edit a bucketlist*
+*Edit a bucketlist item*
 > Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``PUT`` 
 > Data (*done can be True for completed or False for incomplete*) 
@@ -151,12 +156,7 @@ authentication
 > *Updated item object* 
 > Authorization: True 
 
-*Delete a bucketlist*
+*Delete a bucketlist item*
 > Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``DELETE`` 
-> Authorization: True 
-
-*Search bucketlists by name*
-> Url: ``http://<base_url>/bucketlists?q=<search_term>`` 
-> Action: ``GET`` 
 > Authorization: True 
