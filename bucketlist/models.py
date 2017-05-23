@@ -91,7 +91,7 @@ class User(db.Model):
     def exists(email):
         return True if User.query.filter_by(email=email).first() else False
 
-    def generate_token(self, expiration=600):
+    def generate_token(self, expiration=Config.TOKEN_EXPIRATION):
         s = Serializer(Config.SECRET_KEY, expires_in=expiration)
         return s.dumps({'id': self.id})
 
