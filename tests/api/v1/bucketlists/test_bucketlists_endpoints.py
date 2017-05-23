@@ -94,3 +94,16 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('name'), update_fields.get('name'))
+
+    def test_delete_removes_bucketlist_from_database(self):
+        self.client().post('/auth/register', data=self.user_data)
+        self.add_bucketlists()
+
+        self.assertEqual(len(Bucketlist.query.all()), 3)
+
+        response = self.client().delete('/bucketlists/1', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result.get('message'), 'Bucketlist with ID#1 successfully deleted.')
+        self.assertEqual(len(Bucketlist.query.all()), 2)
+

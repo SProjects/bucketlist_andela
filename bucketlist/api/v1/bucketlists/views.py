@@ -42,7 +42,13 @@ class BucketListEndpoint(Resource):
             abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
 
     def delete(self, bucketlist_id):
-        pass
+        bucketlist = Bucketlist.query.get(bucketlist_id)
+        if bucketlist:
+            bucketlist.delete()
+            response = {'message': 'Bucketlist with ID#{} successfully deleted.'.format(bucketlist_id)}
+            return response, 200
+        else:
+            abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
 
 
 class BucketLists(Resource):
