@@ -1,4 +1,4 @@
-from flask_restful import Resource, reqparse, abort, marshal, fields
+from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
 
 from bucketlist import auth
 from bucketlist.models import Item, Bucketlist
@@ -13,8 +13,14 @@ item_fields = {
 
 
 class ItemEndpoint(Resource):
+    @auth.login_required
+    @marshal_with(item_fields)
     def get(self, bucketlist_id, item_id):
-        pass
+        bucketlist = Bucketlist.query.get(bucketlist_id)
+        item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
+        if item:
+            return item, 200
+        abort(400, message='Item with ID#{} not found.'.format(item_id))
 
     def put(self, bucketlist_id, item_id):
         pass

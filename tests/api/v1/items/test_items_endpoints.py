@@ -72,3 +72,16 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)
+
+    def test_get_returns_an_item_when_item_id_is_provided(self):
+        self.add_user()
+        self.add_bucketlists()
+        self.add_items()
+
+        response = self.client().get('/bucketlists/1/items/1', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        actual_results = [result.get('name'), result.get('done')]
+        self.assertListEqual(actual_results, ['ToDo One', False])
+
