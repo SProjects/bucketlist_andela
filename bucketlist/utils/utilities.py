@@ -11,7 +11,7 @@ def validate(email_or_token, password):
     if user is None:
         user = User.query.filter_by(email=email_or_token).first()
         if not user or not user.check_password(password):
-            return abort(401, message='User does not exist.')
+            return abort(401, message='Missing login credentials or User does not exist.')
     g.user = user
     return True
 
