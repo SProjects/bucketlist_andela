@@ -43,8 +43,18 @@ class ItemEndpoint(Resource):
                 return abort(400, message='Failed to update item -> {}'.format(e.message))
         abort(400, message='Item with ID#{} not found.'.format(item_id))
 
+    @auth.login_required
     def delete(self, bucketlist_id, item_id):
-        pass
+        bucketlist = Bucketlist.query.get(bucketlist_id)
+        item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
+        if item:
+            try:
+                item.delete()
+                response = {'message': 'Item with ID#1 deleted successfully.'.format(item_id)}
+                return response, 200
+            except Exception as e:
+                return abort(400, message='Failed to delete item -> {}'.format(e.message))
+        abort(400, message='Item with ID#{} not found.'.format(item_id))
 
 
 class ItemsList(Resource):

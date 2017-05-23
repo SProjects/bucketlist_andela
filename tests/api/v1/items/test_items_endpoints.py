@@ -103,3 +103,17 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
         self.assertEqual(response.status_code, 200)
         actual_results = [result.get('name'), result.get('done')]
         self.assertListEqual(actual_results, ['Updated ToDo Item', True])
+
+    def test_delete_removes_item_from_bucketlist(self):
+        self.add_user()
+        self.add_bucketlists()
+        self.add_items()
+
+        self.assertEqual(len(Item.query.all()), 3)
+
+        response = self.client().delete('/bucketlists/1/items/1', headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(result.get('message'), 'Item with ID#1 deleted successfully.')
+        self.assertEqual(len(Item.query.all()), 2)
