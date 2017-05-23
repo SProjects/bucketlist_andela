@@ -57,7 +57,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
-        self.assertListEqual(result.keys(), ['first_name', 'last_name', 'id', 'email'])
+        self.assertListEqual(result.keys(), ['bucketlists_url', 'first_name', 'last_name', 'id', 'email'])
 
     def test_fails_with_401_error_if_there_is_no_user_with_provided_id(self):
         self.add_users()

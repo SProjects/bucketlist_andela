@@ -21,16 +21,19 @@ def create_app(env_name):
     api_v1.add_resource(AuthenticateUser, '/auth/login')
 
     from api.v1.users.views import UserEndpoint, UserList
-    api_v1.add_resource(UserList, '/users')
-    api_v1.add_resource(UserEndpoint, '/users/<int:user_id>')
+    api_v1.add_resource(UserList, '/users', endpoint='users_endpoint')
+    api_v1.add_resource(UserEndpoint, '/users/<int:user_id>', endpoint='user_endpoint')
 
     from api.v1.bucketlists.views import BucketListEndpoint, BucketLists
-    api_v1.add_resource(BucketLists, '/bucketlists')
-    api_v1.add_resource(BucketListEndpoint, '/bucketlists/<int:bucketlist_id>')
+    api_v1.add_resource(BucketLists, '/bucketlists', endpoint='bucketlists_endpoint')
+    api_v1.add_resource(BucketListEndpoint, '/bucketlists/<int:bucketlist_id>',
+                        endpoint='bucketlist_endpoint')
 
     from api.v1.items.views import ItemEndpoint, ItemsList
-    api_v1.add_resource(ItemsList, '/bucketlists/<int:bucketlist_id>/items')
-    api_v1.add_resource(ItemEndpoint, '/bucketlists/<int:bucketlist_id>/items/<int:item_id>')
+    api_v1.add_resource(ItemsList, '/bucketlists/<int:bucketlist_id>/items',
+                        endpoint='items_endpoint')
+    api_v1.add_resource(ItemEndpoint, '/bucketlists/<int:bucketlist_id>/items/<int:item_id>',
+                        endpoint='item_endpoint')
 
     from api.v1.auth import auth as auth_v1_blueprint
     from api.v1.users import users as users_v1_blueprint
