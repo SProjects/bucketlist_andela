@@ -1,3 +1,4 @@
+from flask import g
 from flask_restful import abort
 
 from bucketlist import auth
@@ -11,5 +12,6 @@ def validate(email_or_token, password):
         user = User.query.filter_by(email=email_or_token).first()
         if not user or not user.check_password(password):
             return abort(401, message='User does not exist.')
+    g.user = user
     return True
 
