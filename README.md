@@ -1,6 +1,8 @@
 BUCKETLIST
 ==========
 
+[ ![Codeship Status for SProjects/bucketlist_andela](https://app.codeship.com/projects/653f2380-22cd-0135-e26b-02c71a3ce6a4/status?branch=master)](https://app.codeship.com/projects/221826)
+
 Technology Stack
 ----------------
 
