@@ -6,6 +6,7 @@ from unittest import TestCase as UnitTestCase
 
 import bucketlist
 from bucketlist.models.bucketlist import Bucketlist
+from bucketlist.models.user import User
 
 
 class TestBucketListEndpoints(TestCase, UnitTestCase):
@@ -125,3 +126,16 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 1)
+
+    def test_pagination_of_bucketlists_when_you_pass_a_limit_parameter(self):
+        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_bucketlists()
+
+        response = self.client().get('/api/v1/bucketlists?limit=1',
+                                     headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        expected_result = sorted(['data', 'next', 'total_pages', 'page', 'num_results'])
+        self.assertListEqual(sorted(result.keys()), expected_result)
+        self.assertEqual(len(result.get('data')), 1)
