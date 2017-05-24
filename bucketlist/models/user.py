@@ -35,7 +35,7 @@ class User(db.Model):
         return True if User.query.filter_by(email=self.email).first() else False
 
     def generate_token(self, expiration=Config.TOKEN_EXPIRATION):
-        s = Serializer(Config.SECRET_KEY, expires_in=expiration)
+        s = Serializer(Config.SECRET_KEY, expires_in=int(expiration))
         return s.dumps({'id': self.id})
 
     def name(self):
