@@ -1,5 +1,8 @@
 from flask import g
+from flask import url_for
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
+
+from math import ceil
 
 from bucketlist import auth
 from bucketlist.models.bucketlist import Bucketlist
@@ -56,8 +59,13 @@ class BucketLists(Resource):
     def get(self):
         parser = reqparse.RequestParser()
         parser.add_argument('q', type=str, help='Search term is missing.', required=False)
+        parser.add_argument('limit', type=str, help='Limit is missing.', required=False)
+        parser.add_argument('page', type=str)
+
         arguments = parser.parse_args()
         search_term = arguments.get('q', None)
+        page_size = arguments.get('limit', None)
+        page = arguments.get('page') or 0
 
         current_user = g.user
         if current_user:
@@ -65,9 +73,14 @@ class BucketLists(Resource):
                 bucketlists = Bucketlist.query.filter(Bucketlist.name.like('%' + search_term + '%'),
                                                       Bucketlist.user == current_user).all()
                 return marshal(bucketlists, bucketlist_fields), 200
-            
-            bucketlists = Bucketlist.query.filter_by(user=current_user).all()
-            return marshal(bucketlists, bucketlist_fields), 200
+
+            if page_size is None:
+                bucketlists = Bucketlist.query.filter_by(user=current_user).all()
+                response = marshal(bucketlists, bucketlist_fields)
+            else:
+                page, page_size = int(page), int(page_size)
+                response = self._paginate(page, page_size, current_user)
+            return response, 200
         else:
             abort(403, message='You are not authenticated. Login.')
 
@@ -89,3 +102,23 @@ class BucketLists(Resource):
                 abort(401, message='Failed to create new bucketlist -> {}'.format(e.message))
         else:
             abort(403, message='You are not authenticated. Login.')
+
+    def _paginate(self, page, page_size, current_user):
+        num_results = Bucketlist.query.filter(Bucketlist.user == current_user).count()
+
+        total_pages = int(ceil(float(num_results) / float(page_size)))
+        bucketlists = Bucketlist.query.filter(Bucketlist.user == current_user).limit(page_size).offset(
+            page * page_size).all()
+
+        navigation = {'total_pages': total_pages, 'num_results': num_results, 'page': page + 1}
+        if page == 1:
+            navigation['prev'] = url_for('bucketlists.bucketlists_endpoint') + '?limit={}'.format(page_size)
+
+        if page > 1:
+            navigation['prev'] = url_for('bucketlists.bucketlists_endpoint') + '?limit={}&page={}'.format(page_size,
+                                                                                                          page - 1)
+        if (page + 1) < total_pages:
+            navigation['next'] = url_for('bucketlists.bucketlists_endpoint') + '?limit={}&page={}'.format(page_size,
+                                                                                                          page + 1)
+        result = dict(data=marshal(bucketlists, bucketlist_fields))
+        return dict(list(result.items()) + list(navigation.items()))
