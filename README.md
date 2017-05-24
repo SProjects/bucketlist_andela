@@ -1,7 +1,7 @@
 BUCKETLIST
 ==========
 
-[ ![Codeship Status for SProjects/bucketlist_andela](https://app.codeship.com/projects/653f2380-22cd-0135-e26b-02c71a3ce6a4/status?branch=master)](https://app.codeship.com/projects/221826)
+[ ![Codeship Status for SProjects/bucketlist_andela](https://app.codeship.com/projects/653f2380-22cd-0135-e26b-02c71a3ce6a4/status?branch=master)](https://app.codeship.com/projects/221826) [![Code Climate](https://codeclimate.com/github/SProjects/bucketlist_andela/badges/gpa.svg)](https://codeclimate.com/github/SProjects/bucketlist_andela) [![Test Coverage](https://codeclimate.com/github/SProjects/bucketlist_andela/badges/coverage.svg)](https://codeclimate.com/github/SProjects/bucketlist_andela/coverage)
 
 Technology Stack
 ----------------
@@ -49,7 +49,7 @@ authentication
     'last_name': 'LastName', 
     'email': 'email@address.com', 
     'password': 'good_password', 
-    'password_confirm: 'good_password'
+    'password_confirm': 'good_password'
 }
 ``` 
 > Response 
@@ -206,3 +206,11 @@ authentication
 > Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``DELETE`` 
 > Authorization: True 
+
+Automated Tests
+---------------
+*Run tests*
+`nosetests`
+
+*With test coverage*
+`nosetests --rednose --with-coverage --cover-inclusive --cover-package=bucketlist --cover-erase --cover-html`
