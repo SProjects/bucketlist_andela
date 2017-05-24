@@ -18,7 +18,7 @@ class User(db.Model):
     password_hash = db.Column(db.String)
     modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone), onupdate=datetime.now(eat_timezone))
     created_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
-    bucketlists = db.relationship('Bucketlist', backref='user')
+    bucketlists = db.relationship('Bucketlist', cascade="all,delete", backref='user')
 
     @property
     def password(self):

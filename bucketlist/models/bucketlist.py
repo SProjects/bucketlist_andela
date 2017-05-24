@@ -12,7 +12,7 @@ class Bucketlist(db.Model):
     name = db.Column(db.String(300), nullable=False, index=True)
     modified_at = db.Column(db.DateTime, default=datetime.now(eat_timezone), onupdate=datetime.now(eat_timezone))
     created_at = db.Column(db.DateTime, default=datetime.now(eat_timezone))
-    items = db.relationship('Item', backref='bucketlist')
+    items = db.relationship('Item', cascade="all,delete", backref='bucketlist')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def save(self):
