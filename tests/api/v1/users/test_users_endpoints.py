@@ -49,7 +49,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
-        self.assertEqual(result['message'], 'Missing login credentials or User does not exist.')
+        self.assertEqual(result['message'], 'Please provide valid login credentials.')
 
     def test_return_a_single_user_if_id_is_provided(self):
         self.add_users()

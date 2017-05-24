@@ -2,6 +2,7 @@ from flask import g
 from flask_restful import reqparse, abort, Resource
 
 from bucketlist.models import User
+from bucketlist.utils.utilities import validate
 
 
 class RegisterUser(Resource):
@@ -23,7 +24,7 @@ class RegisterUser(Resource):
             return abort(401, message='Password and confirmation password don\'t match')
 
         try:
-            if not User.exists(email):
+            if not User(email=email).exists():
                 user = User(first_name=first_name, last_name=last_name, email=email, password=password)
                 user.save()
                 response = {'message': 'You registered successfully.'}
@@ -44,7 +45,7 @@ class AuthenticateUser(Resource):
         arguments = parser.parse_args()
         email, password = arguments.get('email'), arguments.get('password')
 
-        if User.validate(email, password):
+        if validate(email, password):
             return {'token': g.user.generate_token()}, 200
         return abort(401, message='Wrong email or password combination. Try again.')
 

@@ -2,7 +2,6 @@ from flask_restful import Resource, fields, marshal_with, marshal, abort
 
 from bucketlist.models import User
 from bucketlist import auth
-from bucketlist.utils.utilities import validate
 
 user_fields = {
     'id': fields.Integer,
@@ -37,5 +36,5 @@ class UserEndpoint(Resource):
 class UserList(Resource):
     @auth.login_required
     def get(self):
-        users = User.get_all()
+        users = User.query.all()
         return marshal(users, user_fields)

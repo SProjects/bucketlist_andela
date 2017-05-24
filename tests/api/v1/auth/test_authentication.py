@@ -36,6 +36,6 @@ class TestAuthenticateUser(TestCase, UnitTestCase):
         login_details = dict(email='wrong@email.com', password='wrong_password')
         auth_response = self.client().post('/auth/login', data=login_details)
 
-        self.assertIn('Wrong email or password combination. Try again.', auth_response.data)
+        self.assertIn('Please provide valid login credentials.', auth_response.data)
         self.assertEqual(auth_response.status_code, 401)
 
