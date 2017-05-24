@@ -123,3 +123,44 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('message'), 'Item with ID#1 deleted successfully.')
         self.assertEqual(len(Item.query.all()), 2)
+
+    def test_all_actions_fail_with_403_error_if_bucketlist_does_not_belong_to_user(self):
+        self.add_user()
+        self.add_bucketlists()
+        self.add_items()
+
+        user = User(first_name='Another', last_name='User', email='another@email.com', password='test_password')
+        user.save()
+        login_credentials = '{}:{}'.format('another@email.com', 'test_password')
+        auth_headers = {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
+
+        response = self.client().post('/api/v1/bucketlists/1/items', data=self.item_data,
+                                      headers=auth_headers)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found.')
+
+        response = self.client().get('/api/v1/bucketlists/1/items',
+                                     headers=auth_headers)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found.')
+
+        response = self.client().get('/api/v1/bucketlists/1/items/1',
+                                     headers=auth_headers)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found.')
+
+        update_item_fields = {'name': 'Updated ToDo Item', 'done': True}
+        response = self.client().put('/api/v1/bucketlists/1/items/1', data=update_item_fields,
+                                     headers=auth_headers)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found.')
+
+        response = self.client().delete('/api/v1/bucketlists/1/items/1',
+                                        headers=auth_headers)
+        result = json.loads(response.data.decode())
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found.')
