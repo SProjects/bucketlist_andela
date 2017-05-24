@@ -45,14 +45,14 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         bucketlist.db.drop_all()
 
     def test_post_adds_new_bucketlist(self):
-        self.client().post('/auth/register', data=self.user_data)
+        self.client().post('/api/v1/auth/register', data=self.user_data)
         login_credentials = dict(email=self.user_data.get('email'),
                                  password=self.user_data.get('password'))
-        response = self.client().post('/auth/login', data=login_credentials)
+        response = self.client().post('/api/v1/auth/login', data=login_credentials)
         result = json.loads(response.data.decode())
         token = result['token']
 
-        response = self.client().post('/bucketlists', data=self.bucketlist_data,
+        response = self.client().post('/api/v1/bucketlists', data=self.bucketlist_data,
                                       headers=self.token_headers(token))
         result = json.loads(response.data.decode())
 
@@ -61,18 +61,18 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(result['message'], 'Bucketlist created successfully.')
 
     def test_get_returns_all_bucketlists_for_user(self):
-        self.client().post('/auth/register', data=self.user_data)
+        self.client().post('/api/v1/auth/register', data=self.user_data)
         self.add_bucketlists()
-        response = self.client().get('/bucketlists', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 3)
 
     def test_get_returns_one_bucketlist_if_id_is_specified(self):
-        self.client().post('/auth/register', data=self.user_data)
+        self.client().post('/api/v1/auth/register', data=self.user_data)
         self.add_bucketlists()
-        response = self.client().get('/bucketlists/1', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         expected_list = sorted(['id', 'name', 'items', 'date_created', 'date_modified', 'created_by'])
@@ -81,43 +81,46 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertListEqual([result.get('name'), result.get('created_by')], ['Bucketlist One', 1])
 
     def test_edit_updates_bucketlist_fields(self):
-        self.client().post('/auth/register', data=self.user_data)
+        self.client().post('/api/v1/auth/register', data=self.user_data)
         self.add_bucketlists()
-        response = self.client().get('/bucketlists/1', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(result.get('name'), 'Bucketlist One')
 
         update_fields = {'name': 'Visit Bali'}
-        response = self.client().put('/bucketlists/1', data=update_fields, headers=self.authorization_headers())
+        response = self.client().put('/api/v1/bucketlists/1', data=update_fields,
+                                     headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('name'), update_fields.get('name'))
 
     def test_delete_removes_bucketlist_from_database(self):
-        self.client().post('/auth/register', data=self.user_data)
+        self.client().post('/api/v1/auth/register', data=self.user_data)
         self.add_bucketlists()
 
         self.assertEqual(len(Bucketlist.query.all()), 3)
 
-        response = self.client().delete('/bucketlists/1', headers=self.authorization_headers())
+        response = self.client().delete('/api/v1/bucketlists/1',
+                                        headers=self.authorization_headers())
         result = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 successfully deleted.')
         self.assertEqual(len(Bucketlist.query.all()), 2)
 
     def test_search_returns_bucketlists_whose_name_matches_a_search_term(self):
-        self.client().post('/auth/register', data=self.user_data)
+        self.client().post('/api/v1/auth/register', data=self.user_data)
         self.add_bucketlists()
 
-        response = self.client().get('/bucketlists?q=Bucketlist', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists?q=Bucketlist',
+                                     headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 3)
 
-        response = self.client().get('/bucketlists?q=One', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists?q=One', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)

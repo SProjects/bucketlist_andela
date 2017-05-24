@@ -38,14 +38,14 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_returns_all_users(self):
         self.add_users()
-        response = self.client().get('/users', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/users', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)
 
     def test_returns_empty_list_if_there_are_no_users(self):
-        response = self.client().get('/users', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/users', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
@@ -53,7 +53,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_return_a_single_user_if_id_is_provided(self):
         self.add_users()
-        response = self.client().get('/users/1', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/users/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -61,7 +61,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_fails_with_401_error_if_there_is_no_user_with_provided_id(self):
         self.add_users()
-        response = self.client().get('/users/20', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/users/20', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)
@@ -71,7 +71,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         self.add_users()
         self.assertEqual(len(User.query.all()), 2)
 
-        response = self.client().delete('/users/1', headers=self.authorization_headers())
+        response = self.client().delete('/api/v1/users/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -80,7 +80,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
     def test_delete_endpoint_fails_with_401_error_if_there_is_no_user_with_the_provided_id(self):
         self.add_users()
-        response = self.client().get('/users/20', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/users/20', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)

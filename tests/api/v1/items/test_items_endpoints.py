@@ -57,7 +57,7 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
 
         self.assertEqual(len(Item.query.all()), 0)
 
-        response = self.client().post('/bucketlists/1/items', data=self.item_data,
+        response = self.client().post('/api/v1/bucketlists/1/items', data=self.item_data,
                                       headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
@@ -69,7 +69,8 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
         self.add_bucketlists()
         self.add_items()
 
-        response = self.client().get('/bucketlists/1/items', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists/1/items',
+                                     headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -80,7 +81,8 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
         self.add_bucketlists()
         self.add_items()
 
-        response = self.client().get('/bucketlists/1/items/1', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists/1/items/1',
+                                     headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
@@ -92,13 +94,14 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
         self.add_bucketlists()
         self.add_items()
 
-        response = self.client().get('/bucketlists/1/items/1', headers=self.authorization_headers())
+        response = self.client().get('/api/v1/bucketlists/1/items/1',
+                                     headers=self.authorization_headers())
         result = json.loads(response.data.decode())
         actual_results = [result.get('name'), result.get('done')]
         self.assertListEqual(actual_results, ['ToDo One', False])
 
         update_item_fields = {'name': 'Updated ToDo Item', 'done': True}
-        response = self.client().put('/bucketlists/1/items/1', data=update_item_fields,
+        response = self.client().put('/api/v1/bucketlists/1/items/1', data=update_item_fields,
                                      headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
@@ -113,7 +116,8 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
 
         self.assertEqual(len(Item.query.all()), 3)
 
-        response = self.client().delete('/bucketlists/1/items/1', headers=self.authorization_headers())
+        response = self.client().delete('/api/v1/bucketlists/1/items/1',
+                                        headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)

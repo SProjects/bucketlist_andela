@@ -25,16 +25,16 @@ class TestRegisterUser(TestCase, UnitTestCase):
         bucketlist.db.drop_all()
 
     def test_user_registration(self):
-        response = self.client().post('/auth/register', data=self.user_data)
+        response = self.client().post('/api/v1/auth/register', data=self.user_data)
         result = json.loads(response.data.decode())
 
         self.assertEqual(result['message'], 'You registered successfully.')
 
     def test_already_registered_user(self):
-        response = self.client().post('/auth/register', data=self.user_data)
+        response = self.client().post('/api/v1/auth/register', data=self.user_data)
         self.assertEqual(response.status_code, 201)
 
-        second_response = self.client().post('/auth/register', data=self.user_data)
+        second_response = self.client().post('/api/v1/auth/register', data=self.user_data)
         self.assertEqual(second_response.status_code, 202)
 
         result = json.loads(second_response.data.decode())
@@ -44,7 +44,7 @@ class TestRegisterUser(TestCase, UnitTestCase):
         user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@email.com',
                      'password': 'test_password', 'password_confirm': 'different_test_password'}
 
-        response = self.client().post('/auth/register', data=user_data)
+        response = self.client().post('/api/v1/auth/register', data=user_data)
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 401)

@@ -8,7 +8,7 @@ user_fields = {
     'first_name': fields.String,
     'last_name': fields.String,
     'email': fields.String,
-    'bucketlists_url': fields.Url('bucketlists_endpoint', absolute=True)
+    'bucketlists_url': fields.Url('bucketlists.bucketlists_endpoint', absolute=True)
 }
 
 
