@@ -6,7 +6,6 @@ from unittest import TestCase as UnitTestCase
 
 import bucketlist
 from bucketlist.models.bucketlist import Bucketlist
-from bucketlist.models.user import User
 
 
 class TestBucketListEndpoints(TestCase, UnitTestCase):

@@ -41,24 +41,28 @@ authentication
 > Url: ``http://<base_url>/api/v1/auth/register`` 
 > Action: ``POST`` 
 > Data  
-> `` 
-> {'first_name': 'FirstName', 'last_name': 'LastName', 
-> 'email': 'email@address.com', 'password': 'good_password', 
-> 'password_confirm: 'good_password'}
-> `` 
+```javascript 
+{'first_name': 'FirstName', 'last_name': 'LastName', 
+'email': 'email@address.com', 'password': 'good_password', 
+'password_confirm: 'good_password'}
+``` 
 > Response 
-> ``{'message': 'You registered successfully.'}`` 
+```javascript
+{'message': 'You registered successfully.'}
+``` 
 > Authorization: False 
 
 **Authentication Endpoint**
 > Url: ``http://<base_url>/api/v1/auth/login`` 
 > Action: ``POST`` 
 > Data  
-> ``
+```javascript
 > {'email': 'email@address.com', 'password': 'good_password'}
-> `` 
+``` 
 > Response 
-> ``{'token': 'alphanumeric_value'}`` 
+```javascript
+{'token': 'alphanumeric_value'}
+``` 
 > Authorization: False 
 
 **User Endpoints**
@@ -84,11 +88,13 @@ authentication
 > Url: ``http://<base_url>/api/v1/bucketlists`` 
 > Action: ``POST`` 
 > Data  
-> ``
-> {'name': 'Bucketlist Name'}
-> `` 
+```javascript
+{'name': 'Bucketlist Name'}
+``` 
 > Response 
-> ``{'message': 'Bucketlist created successfully.'}`` 
+```javascript
+{'message': 'Bucketlist created successfully.'}
+``` 
 > Authorization: True 
 
 *Get all bucketlists*
@@ -105,9 +111,9 @@ authentication
 > Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
 > Action: ``PUT`` 
 > Data
-> ``
-> {'name': 'Bucketlist Name'}
-> `` 
+```javascript
+{'name': 'Bucketlist Name'}
+``` 
 > Response 
 > *Updated bucketlist object* 
 > Authorization: True 
@@ -120,7 +126,39 @@ authentication
 *Search bucketlists by name*
 > Url: ``http://<base_url>/api/v1/bucketlists?q=<search_term>`` 
 > Action: ``GET`` 
-> Authorization: True 
+> Authorization: True
+ 
+*Paginate bucketlist*
+> Url: ``http://<base_url>/api/v1/bucketlists?limit=<page_size>``
+> Action: ``GET``
+> Response
+```javascript
+{
+  "data": [
+    {
+      "created_by": 1,
+      "date_created": "Tue, 23 May 2017 10:59:06 -0000",
+      "date_modified": "Tue, 23 May 2017 12:26:50 -0000",
+      "id": 1,
+      "items": [
+        {
+          "date_created": "Tue, 23 May 2017 14:25:13 -0000",
+          "date_modified": "Tue, 23 May 2017 14:25:13 -0000",
+          "done": false,
+          "id": 1,
+          "name": "To do item"
+        }
+      ],
+      "name": "Bucketlist name"
+    }
+  ],
+  "next": "/api/v1/bucketlists?limit=1&page=1",
+  "num_results": 2,
+  "page": 1,
+  "total_pages": 2
+}
+```
+> Authorization: True
 
 **Bucketlist Item Endpoints**
 
@@ -128,11 +166,13 @@ authentication
 > Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
 > Action: ``POST`` 
 > Data
-> ``
-> {'name': 'Item Name'}
-> `` 
+```javascript
+{'name': 'Item Name'}
+``` 
 > Response 
-> ``{'message': 'Item successfully added to Bucketlist ID#<bucketlist_id>'}`` 
+```javascript
+{'message': 'Item successfully added to Bucketlist ID#<bucketlist_id>'}
+``` 
 > Authorization: True 
 
 *Get all bucketlist items*
@@ -149,9 +189,9 @@ authentication
 > Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``PUT`` 
 > Data (*done can be True for completed or False for incomplete*) 
-> ``
-> {'name': 'Bucketlist Name', 'done': True}
-> `` 
+```javascript
+{'name': 'Bucketlist Name', 'done': True}
+``` 
 > Response 
 > *Updated item object* 
 > Authorization: True 
