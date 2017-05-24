@@ -2,7 +2,7 @@ from flask import g
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
 
 from bucketlist import auth
-from bucketlist.models import Bucketlist
+from bucketlist.models.bucketlist import Bucketlist
 from ..items.views import item_fields
 
 bucketlist_fields = {

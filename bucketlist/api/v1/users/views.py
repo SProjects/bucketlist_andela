@@ -1,6 +1,6 @@
 from flask_restful import Resource, fields, marshal_with, marshal, abort
 
-from bucketlist.models import User
+from bucketlist.models.user import User
 from bucketlist import auth
 
 user_fields = {

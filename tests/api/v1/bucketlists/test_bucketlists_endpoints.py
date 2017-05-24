@@ -5,7 +5,7 @@ import base64
 from unittest import TestCase as UnitTestCase
 
 import bucketlist
-from bucketlist.models import Bucketlist
+from bucketlist.models.bucketlist import Bucketlist
 
 
 class TestBucketListEndpoints(TestCase, UnitTestCase):

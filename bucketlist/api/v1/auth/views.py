@@ -1,7 +1,7 @@
 from flask import g
 from flask_restful import reqparse, abort, Resource
 
-from bucketlist.models import User
+from bucketlist.models.user import User
 from bucketlist.utils.utilities import validate
 
 

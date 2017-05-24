@@ -5,7 +5,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
                           BadSignature, SignatureExpired)
 
 from bucketlist import auth
-from bucketlist.models import User
+from bucketlist.models.user import User
 from bucketlist.config import Config
 
 

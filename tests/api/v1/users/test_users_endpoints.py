@@ -4,7 +4,7 @@ from flask_testing import TestCase
 from unittest import TestCase as UnitTestCase
 
 import bucketlist
-from bucketlist.models import User
+from bucketlist.models.user import User
 
 
 class TestUsersEndpoint(TestCase, UnitTestCase):

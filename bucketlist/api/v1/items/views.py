@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
 
 from bucketlist import auth
-from bucketlist.models import Item, Bucketlist
+from bucketlist.models.item import Item
+from bucketlist.models.bucketlist import Bucketlist
 
 item_fields = {
     'id': fields.Integer,
