@@ -42,9 +42,13 @@ authentication
 > Action: ``POST`` 
 > Data  
 ```javascript 
-{'first_name': 'FirstName', 'last_name': 'LastName', 
-'email': 'email@address.com', 'password': 'good_password', 
-'password_confirm: 'good_password'}
+{
+    'first_name': 'FirstName', 
+    'last_name': 'LastName', 
+    'email': 'email@address.com', 
+    'password': 'good_password', 
+    'password_confirm: 'good_password'
+}
 ``` 
 > Response 
 ```javascript
