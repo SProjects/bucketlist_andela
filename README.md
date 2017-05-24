@@ -38,7 +38,7 @@ authentication
 
 
 **Registration Endpoint**
-> Url: ``http://<base_url>/auth/register`` 
+> Url: ``http://<base_url>/api/v1/auth/register`` 
 > Action: ``POST`` 
 > Data  
 > `` 
@@ -51,7 +51,7 @@ authentication
 > Authorization: False 
 
 **Authentication Endpoint**
-> Url: ``http://<base_url>/auth/login`` 
+> Url: ``http://<base_url>/api/v1/auth/login`` 
 > Action: ``POST`` 
 > Data  
 > ``
@@ -64,24 +64,24 @@ authentication
 **User Endpoints**
 
 *Get all user*
-> Url: ``http://<base_url>/users`` 
+> Url: ``http://<base_url>/api/v1/users`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 *Get a user*
-> Url: ``http://<base_url>/users/<user_id>`` 
+> Url: ``http://<base_url>/api/v1/users/<user_id>`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 *Delete a user*
-> Url: ``http://<base_url>/users/<user_id>`` 
+> Url: ``http://<base_url>/api/v1/users/<user_id>`` 
 > Action: ``DELETE`` 
 > Authorization: True 
 
 **Bucketlist Endpoints**
 
 *Add new bucketlist*
-> Url: ``http://<base_url>/bucketlists`` 
+> Url: ``http://<base_url>/api/v1/bucketlists`` 
 > Action: ``POST`` 
 > Data  
 > ``
@@ -92,17 +92,17 @@ authentication
 > Authorization: True 
 
 *Get all bucketlists*
-> Url: ``http://<base_url>/bucketlists`` 
+> Url: ``http://<base_url>/api/v1/bucketlists`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 *Get a bucketlist* 
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 *Edit a bucketlist*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
 > Action: ``PUT`` 
 > Data
 > ``
@@ -113,19 +113,19 @@ authentication
 > Authorization: True 
 
 *Delete a bucketlist*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
 > Action: ``DELETE`` 
 > Authorization: True 
 
 *Search bucketlists by name*
-> Url: ``http://<base_url>/bucketlists?q=<search_term>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists?q=<search_term>`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 **Bucketlist Item Endpoints**
 
 *Add new bucketlist item*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
 > Action: ``POST`` 
 > Data
 > ``
@@ -136,17 +136,17 @@ authentication
 > Authorization: True 
 
 *Get all bucketlist items*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 *Get a bucketlist item*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items/<item_id>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``GET`` 
 > Authorization: True 
 
 *Edit a bucketlist item*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items/<item_id>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``PUT`` 
 > Data (*done can be True for completed or False for incomplete*) 
 > ``
@@ -157,6 +157,6 @@ authentication
 > Authorization: True 
 
 *Delete a bucketlist item*
-> Url: ``http://<base_url>/bucketlists/<bucketlist_id>/items/<item_id>`` 
+> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
 > Action: ``DELETE`` 
 > Authorization: True 
