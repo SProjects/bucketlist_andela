@@ -1,16 +1,17 @@
-BUCKETLIST
-==========
-
+# BUCKETLIST
 [ ![Codeship Status for SProjects/bucketlist_andela](https://app.codeship.com/projects/653f2380-22cd-0135-e26b-02c71a3ce6a4/status?branch=master)](https://app.codeship.com/projects/221826) [![Code Climate](https://codeclimate.com/github/SProjects/bucketlist_andela/badges/gpa.svg)](https://codeclimate.com/github/SProjects/bucketlist_andela) [![Test Coverage](https://codeclimate.com/github/SProjects/bucketlist_andela/badges/coverage.svg)](https://codeclimate.com/github/SProjects/bucketlist_andela/coverage)
 
-Technology Stack
-----------------
+## Introduction
+Bucketlist is an API powered application that helps its users to create bucketlists and add todo items to them.
+
+
+## Technology Stack
 
 **Backend**
 - Python 2.7
 - Postgres 9.4
-- Flask
-- Flash Restful
+- Flask 0.12.2
+- Flash Restful 0.3.5
 
 **Frontend**
 - Angular 2
@@ -19,8 +20,8 @@ Technology Stack
 * Install [Python v2.7.*](https://www.python.org/downloads/)
 * Install [virtualenv and/or virtualenvwrapper](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
-Setup
------
+## Setup
+
 1. Create a virtual environment and activate it. 
 2. Clone the project from `https://github.com/SProjects/bucketlist_andela.git`
 3. `cd` into the project root
@@ -29,8 +30,8 @@ Setup
 6. Migrate the database using `python manage.py db upgrade`
 7. Start the application with; `python manage.py runserver`
 
-Usage
------
+## Usage
+
 **Authorization**
 
 - Using the authentication endpoint get a token to send as a username 
@@ -40,9 +41,10 @@ authentication
 
 
 **Registration Endpoint**
-> Url: ``http://<base_url>/api/v1/auth/register`` 
-> Action: ``POST`` 
-> Data  
+
+Url: ``http://<base_url>/api/v1/auth/register``
+Action: ``POST`` 
+Data  
 ```javascript 
 {
     'first_name': 'FirstName', 
@@ -52,41 +54,45 @@ authentication
     'password_confirm': 'good_password'
 }
 ``` 
-> Response 
+Response 
 ```javascript
 {'message': 'You registered successfully.'}
 ``` 
-> Authorization: False 
+Authorization: False 
 
 **Authentication Endpoint**
-> Url: ``http://<base_url>/api/v1/auth/login`` 
-> Action: ``POST`` 
-> Data  
+
+Url: ``http://<base_url>/api/v1/auth/login`` 
+Action: ``POST`` 
+Data  
 ```javascript
-> {'email': 'email@address.com', 'password': 'good_password'}
+    {
+        'email': 'email@address.com', 
+        'password': 'good_password'
+    }
 ``` 
-> Response 
+Response 
 ```javascript
-{'token': 'alphanumeric_value'}
+    {'token': 'alphanumeric_string'}
 ``` 
-> Authorization: False 
+Authorization: False 
 
 **User Endpoints**
 
 *Get all user*
-> Url: ``http://<base_url>/api/v1/users`` 
-> Action: ``GET`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/users`` 
+Action: ``GET`` 
+Authorization: True 
 
 *Get a user*
-> Url: ``http://<base_url>/api/v1/users/<user_id>`` 
-> Action: ``GET`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+Action: ``GET`` 
+Authorization: True 
 
 *Edit a user*
-> Url: ``http://<base_url>/api/v1/users/<user_id>`` 
-> Action: ``PUT`` 
-> Data
+Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+Action: ``PUT`` 
+Data
 ```javascript
     {
         'first_name': 'updated_first_name',
@@ -97,65 +103,65 @@ authentication
         'new_password_confirm': 'new_password'
     }
 ``` 
-> Response 
-> *Updated user object* 
-> Authorization: True 
+Response 
+*Updated user object* 
+Authorization: True 
 
 *Delete a user*
-> Url: ``http://<base_url>/api/v1/users/<user_id>`` 
-> Action: ``DELETE`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+Action: ``DELETE`` 
+Authorization: True 
 
 **Bucketlist Endpoints**
 
 *Add new bucketlist*
-> Url: ``http://<base_url>/api/v1/bucketlists`` 
-> Action: ``POST`` 
-> Data  
+Url: ``http://<base_url>/api/v1/bucketlists`` 
+Action: ``POST`` 
+Data  
 ```javascript
-{'name': 'Bucketlist Name'}
+    {'name': 'Bucketlist Name'}
 ``` 
-> Response 
+Response 
 ```javascript
-{'message': 'Bucketlist created successfully.'}
+    {'message': 'Bucketlist created successfully.'}
 ``` 
-> Authorization: True 
+Authorization: True 
 
 *Get all bucketlists*
-> Url: ``http://<base_url>/api/v1/bucketlists`` 
-> Action: ``GET`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/bucketlists`` 
+Action: ``GET`` 
+Authorization: True 
 
 *Get a bucketlist* 
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
-> Action: ``GET`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+Action: ``GET`` 
+Authorization: True 
 
 *Edit a bucketlist*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
-> Action: ``PUT`` 
-> Data
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+Action: ``PUT`` 
+Data
 ```javascript
-{'name': 'Bucketlist Name'}
+    {'name': 'Bucketlist Name'}
 ``` 
-> Response 
-> *Updated bucketlist object* 
-> Authorization: True 
+Response 
+*Updated bucketlist object* 
+Authorization: True 
 
 *Delete a bucketlist*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
-> Action: ``DELETE`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+Action: ``DELETE`` 
+Authorization: True 
 
 *Search bucketlists by name*
-> Url: ``http://<base_url>/api/v1/bucketlists?q=<search_term>`` 
-> Action: ``GET`` 
-> Authorization: True
+Url: ``http://<base_url>/api/v1/bucketlists?q=<search_term>`` 
+Action: ``GET`` 
+Authorization: True
  
 *Paginate bucketlist*
-> Url: ``http://<base_url>/api/v1/bucketlists?limit=<page_size>``
-> Action: ``GET``
-> Response
+Url: ``http://<base_url>/api/v1/bucketlists?limit=<page_size>``
+Action: ``GET``
+Response
 ```javascript
 {
   "data": [
@@ -182,48 +188,48 @@ authentication
   "total_pages": 2
 }
 ```
-> Authorization: True
+Authorization: True
 
 **Bucketlist Item Endpoints**
 
 *Add new bucketlist item*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
-> Action: ``POST`` 
-> Data
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
+Action: ``POST`` 
+Data
 ```javascript
 {'name': 'Item Name'}
 ``` 
-> Response 
+Response 
 ```javascript
 {'message': 'Item successfully added to Bucketlist ID#<bucketlist_id>'}
 ``` 
-> Authorization: True 
+Authorization: True 
 
 *Get all bucketlist items*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
-> Action: ``GET`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
+Action: ``GET`` 
+Authorization: True 
 
 *Get a bucketlist item*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
-> Action: ``GET`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
+Action: ``GET`` 
+Authorization: True 
 
 *Edit a bucketlist item*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
-> Action: ``PUT`` 
-> Data (*done can be True for completed or False for incomplete*) 
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
+Action: ``PUT`` 
+Data (*done can be True for completed or False for incomplete*) 
 ```javascript
 {'name': 'Bucketlist Name', 'done': True}
 ``` 
-> Response 
-> *Updated item object* 
-> Authorization: True 
+Response 
+*Updated item object* 
+Authorization: True 
 
 *Delete a bucketlist item*
-> Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
-> Action: ``DELETE`` 
-> Authorization: True 
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
+Action: ``DELETE`` 
+Authorization: True 
 
 Automated Tests
 ---------------
