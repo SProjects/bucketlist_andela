@@ -42,10 +42,8 @@ authentication
 
 #### Registration Endpoint
 
-Url: ``http://<base_url>/api/v1/auth/register``
-
-Action: ``POST`` 
-
+Url: `http://<base_url>/api/v1/auth/register`
+Action: `POST` 
 Data  
 ```javascript 
 {
@@ -64,18 +62,16 @@ Authorization: False
 
 #### Authentication Endpoint
 
-Url: ``http://<base_url>/api/v1/auth/login`` 
-
-Action: ``POST`` 
-
-Data  
+Url: `http://<base_url>/api/v1/auth/login`  
+Action: `POST`  
+Data    
 ```javascript
     {
         'email': 'email@address.com', 
         'password': 'good_password'
     }
 ``` 
-Response 
+Response   
 ```javascript
     {'token': 'alphanumeric_string'}
 ``` 
@@ -83,29 +79,23 @@ Authorization: False
 
 #### User Endpoints
 
-###### Get all user
+##### Get all user
 
-Url: ``http://<base_url>/api/v1/users`` 
+Url: `http://<base_url>/api/v1/users`  
+Action: `GET`  
+Authorization: True  
 
-Action: ``GET`` 
+##### Get a user
 
-Authorization: True 
+Url: `http://<base_url>/api/v1/users/<user_id>`  
+Action: `GET`  
+Authorization: True  
 
-###### Get a user
+##### Edit a user
 
-Url: ``http://<base_url>/api/v1/users/<user_id>`` 
-
-Action: ``GET`` 
-
-Authorization: True 
-
-###### Edit a user
-
-Url: ``http://<base_url>/api/v1/users/<user_id>`` 
-
-Action: ``PUT`` 
-
-Data
+Url: `http://<base_url>/api/v1/users/<user_id>`  
+Action: `PUT`  
+Data  
 ```javascript
     {
         'first_name': 'updated_first_name',
@@ -116,91 +106,72 @@ Data
         'new_password_confirm': 'new_password'
     }
 ``` 
-Response 
+Response:  
 *Updated user object* 
-
 Authorization: True 
 
-###### Delete a user
+##### Delete a user
 
-Url: ``http://<base_url>/api/v1/users/<user_id>`` 
-
-Action: ``DELETE`` 
-
-Authorization: True 
+Url: `http://<base_url>/api/v1/users/<user_id>`  
+Action: `DELETE`  
+Authorization: True  
 
 #### Bucketlist Endpoints
 
-###### Add new bucketlist
+##### Add new bucketlist
 
-Url: ``http://<base_url>/api/v1/bucketlists`` 
-
-Action: ``POST`` 
-
+Url: `http://<base_url>/api/v1/bucketlists`  
+Action: `POST`  
 Data  
 ```javascript
     {'name': 'Bucketlist Name'}
 ``` 
-Response 
+Response  
 ```javascript
     {'message': 'Bucketlist created successfully.'}
 ``` 
 Authorization: True 
 
-###### Get all bucketlists
+##### Get all bucketlists
 
-Url: ``http://<base_url>/api/v1/bucketlists`` 
+Url: `http://<base_url>/api/v1/bucketlists`  
+Action: `GET`  
+Authorization: True  
 
-Action: ``GET`` 
+##### Get a bucketlist 
 
-Authorization: True 
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>`  
+Action: `GET`  
+Authorization: True  
 
-###### Get a bucketlist 
+##### Edit a bucketlist
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>``
- 
-Action: ``GET`` 
-
-Authorization: True 
-
-###### Edit a bucketlist
-
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
-
-Action: ``PUT`` 
-
-Data
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>`  
+Action: `PUT`  
+Data  
 ```javascript
     {'name': 'Bucketlist Name'}
 ``` 
-Response
-*Updated bucketlist object* 
-
+Response  
+*Updated bucketlist object*   
 Authorization: True 
 
-###### Delete a bucketlist
+##### Delete a bucketlist
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>`  
+Action: `DELETE`  
+Authorization: True  
+##### Search bucketlists by name
 
-Action: ``DELETE`` 
+Url: `http://<base_url>/api/v1/bucketlists?q=<search_term>`   
+Action: `GET`  
+Authorization: True  
 
-Authorization: True 
+##### Paginate bucketlist
 
-###### Search bucketlists by name
-
-Url: ``http://<base_url>/api/v1/bucketlists?q=<search_term>`` 
-
-Action: ``GET`` 
-
-Authorization: True
- 
-###### Paginate bucketlist
-
-Url: ``http://<base_url>/api/v1/bucketlists?limit=<page_size>``
-
-Action: ``GET``
-
-Response
+Url: `http://<base_url>/api/v1/bucketlists?limit=<page_size>`  
+Action: `GET`  
+Response:  
 ```javascript
 {
   "data": [
@@ -227,71 +198,58 @@ Response
   "total_pages": 2
 }
 ```
-Authorization: True
+Authorization: True  
 
 #### Bucketlist Item Endpoints
 
-###### Add new bucketlist item
+##### Add new bucketlist item
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
-
-Action: ``POST`` 
-
-Data
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`   
+Action: `POST`  
+Data  
 ```javascript
 {'name': 'Item Name'}
 ``` 
-Response 
+Response:  
 ```javascript
 {'message': 'Item successfully added to Bucketlist ID#<bucketlist_id>'}
 ``` 
 Authorization: True 
 
-###### Get all bucketlist items
+##### Get all bucketlist items
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
-
-Action: ``GET`` 
-
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`  
+Action: `GET`  
 Authorization: True 
 
-###### Get a bucketlist item
+##### Get a bucketlist item
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>``
- 
-Action: ``GET`` 
-
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`  
+Action: `GET`  
 Authorization: True 
 
-###### Edit a bucketlist item
+##### Edit a bucketlist item
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>``
- 
-Action: ``PUT`` 
-
-Data (*done can be True for completed or False for incomplete*) 
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`  
+Action: `PUT`  
+Data (*done can be True for completed or False for incomplete*)  
 ```javascript
 {'name': 'Bucketlist Name', 'done': True}
 ``` 
-Response 
-*Updated item object* 
-
+Response:  
+*Updated item object*   
 Authorization: True 
 
-###### Delete a bucketlist item
+##### Delete a bucketlist item
 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
-
-Action: ``DELETE`` 
-
-Authorization: True 
+Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`  
+Action: `DELETE`  
+Authorization: True  
 
 ## Automated Tests
 
-###### Run tests
-
+##### Run tests
 `nosetests --rednose`
 
-###### Run tests coverage
-
+##### Run tests with coverage
 `nosetests --rednose --with-coverage --cover-inclusive --cover-package=bucketlist --cover-erase --cover-html`
