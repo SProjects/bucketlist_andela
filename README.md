@@ -42,9 +42,9 @@ authentication
 
 #### Registration Endpoint
 
-Url: `http://<base_url>/api/v1/auth/register`
-Action: `POST` 
-Data  
+Url: `http://<base_url>/api/v1/auth/register`  
+Action: `POST`  
+Data   
 ```javascript 
 {
     'first_name': 'FirstName', 
@@ -54,7 +54,7 @@ Data
     'password_confirm': 'good_password'
 }
 ``` 
-Response 
+Response  
 ```javascript
 {'message': 'You registered successfully.'}
 ``` 
@@ -107,7 +107,7 @@ Data
     }
 ``` 
 Response:  
-*Updated user object* 
+*Updated user object*   
 Authorization: True 
 
 ##### Delete a user
