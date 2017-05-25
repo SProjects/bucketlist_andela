@@ -5,6 +5,7 @@ from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_wi
 from math import ceil
 
 from bucketlist import auth
+from bucketlist.config import Config
 from bucketlist.models.bucketlist import Bucketlist
 from ..items.views import item_fields
 
@@ -78,7 +79,8 @@ class BucketLists(Resource):
                 bucketlists = Bucketlist.query.filter_by(user=current_user).all()
                 response = marshal(bucketlists, bucketlist_fields)
             else:
-                page, page_size = int(page), int(page_size)
+                page = int(page)
+                page_size = int(page_size) if int(page_size) < Config.MAX_PAGE_SIZE else Config.MAX_PAGE_SIZE
                 response = self._paginate(page, page_size, current_user)
             return response, 200
         else:

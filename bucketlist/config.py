@@ -9,6 +9,7 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = '6678509e124efe369846ee550463ee080154b91e343e7260db52a45d8b747f8f24624149692191a7'
     TOKEN_EXPIRATION = os.getenv('TOKEN_EXPIRATION') or 600  # Default 10 minutes
+    MAX_PAGE_SIZE = os.getenv('MAX_PAGE_SIZE') or 100  # Maximum results per page
 
 
 class StagingConfig(Config):
