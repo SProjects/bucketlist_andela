@@ -1,0 +1,2 @@
+class PasswordError(RuntimeError):
+    pass

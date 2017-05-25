@@ -85,3 +85,76 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result['message'], 'User with id#20 not found.')
+
+    def test_edit_updates_a_user_object(self):
+        self.add_users()
+        response = self.client().get('/api/v1/users/1', headers=self.authorization_headers())
+        user = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertListEqual([user.get('first_name'), user.get('last_name'), user.get('email')],
+                             ['First1', 'Last1', 'first1@email.com'])
+
+        update_fields = dict(first_name='Updated First1', last_name='Updated Last1', email=user.get('email'))
+        response = self.client().put('/api/v1/users/1', data=update_fields,
+                                     headers=self.authorization_headers())
+        updated_user = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        expected_result = [update_fields.get('first_name'), update_fields.get('last_name'),
+                           update_fields.get('email')]
+        actual_result = [updated_user.get('first_name'), updated_user.get('last_name'), updated_user.get('email')]
+        self.assertListEqual(actual_result, expected_result)
+
+    def test_user_can_update_password(self):
+        self.add_users()
+        update_fields = dict(old_password='test_password', new_password='new_password',
+                             new_password_confirm='new_password')
+        response = self.client().put('/api/v1/users/1', data=update_fields,
+                                     headers=self.authorization_headers())
+        updated_user = User.query.get(1)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(updated_user.check_password(update_fields.get('new_password')))
+        self.assertFalse(updated_user.check_password(update_fields.get('old_password')))
+
+    def test_password_update_does_not_occur_if_any_password_update_fields_is_missing(self):
+        self.add_users()
+        update_fields = dict(old_password='test_password', new_password='new_password')
+        response = self.client().put('/api/v1/users/1', data=update_fields,
+                                     headers=self.authorization_headers())
+        updated_user = User.query.get(1)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
+        self.assertTrue(updated_user.check_password(update_fields.get('old_password')))
+
+    def test_password_update_fails_with_401_if_old_password_is_incorrect(self):
+        self.add_users()
+        update_fields = dict(old_password='wrong_old_password', new_password='new_password',
+                             new_password_confirm='new_password')
+        response = self.client().put('/api/v1/users/1', data=update_fields,
+                                     headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+        updated_user = User.query.get(1)
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(result.get('message'),
+                         "Failed to update user -> Incorrect old password or new passwords don't match.")
+        self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
+        self.assertTrue(updated_user.check_password('test_password'))
+
+    def test_password_update_fails_with_401_if_new_password_fields_dont_match(self):
+        self.add_users()
+        update_fields = dict(old_password='test_password', new_password='new_password',
+                             new_password_confirm='none_matching_password')
+        response = self.client().put('/api/v1/users/1', data=update_fields,
+                                     headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+        updated_user = User.query.get(1)
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(result.get('message'),
+                         "Failed to update user -> Incorrect old password or new passwords don't match.")
+        self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
+        self.assertTrue(updated_user.check_password('test_password'))
