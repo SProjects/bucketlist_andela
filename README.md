@@ -83,6 +83,24 @@ authentication
 > Action: ``GET`` 
 > Authorization: True 
 
+*Edit a user*
+> Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+> Action: ``PUT`` 
+> Data
+```javascript
+    {
+        'first_name': 'updated_first_name',
+        'last_name': 'updated_last_name',
+        'email': 'updated_email'
+        'old_password': 'current_password',
+        'new_password': 'new_password',
+        'new_password_confirm': 'new_password'
+    }
+``` 
+> Response 
+> *Updated user object* 
+> Authorization: True 
+
 *Delete a user*
 > Url: ``http://<base_url>/api/v1/users/<user_id>`` 
 > Action: ``DELETE`` 
@@ -210,7 +228,9 @@ authentication
 Automated Tests
 ---------------
 *Run tests*
-`nosetests`
 
-*With test coverage*
+`nosetests --rednose`
+
+*Run tests coverage*
+
 `nosetests --rednose --with-coverage --cover-inclusive --cover-package=bucketlist --cover-erase --cover-html`
