@@ -32,7 +32,7 @@ Bucketlist is an API powered application that helps its users to create bucketli
 
 ## Usage
 
-**Authorization**
+#### Authorization
 
 - Using the authentication endpoint get a token to send as a username 
 in basic authentication parameters.
@@ -40,10 +40,12 @@ in basic authentication parameters.
 authentication
 
 
-**Registration Endpoint**
+#### Registration Endpoint
 
 Url: ``http://<base_url>/api/v1/auth/register``
+
 Action: ``POST`` 
+
 Data  
 ```javascript 
 {
@@ -60,10 +62,12 @@ Response
 ``` 
 Authorization: False 
 
-**Authentication Endpoint**
+#### Authentication Endpoint
 
 Url: ``http://<base_url>/api/v1/auth/login`` 
+
 Action: ``POST`` 
+
 Data  
 ```javascript
     {
@@ -77,21 +81,30 @@ Response
 ``` 
 Authorization: False 
 
-**User Endpoints**
+#### User Endpoints
 
-*Get all user*
+###### Get all user
+
 Url: ``http://<base_url>/api/v1/users`` 
+
 Action: ``GET`` 
+
 Authorization: True 
 
-*Get a user*
+###### Get a user
+
 Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+
 Action: ``GET`` 
+
 Authorization: True 
 
-*Edit a user*
+###### Edit a user
+
 Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+
 Action: ``PUT`` 
+
 Data
 ```javascript
     {
@@ -105,18 +118,25 @@ Data
 ``` 
 Response 
 *Updated user object* 
+
 Authorization: True 
 
-*Delete a user*
+###### Delete a user
+
 Url: ``http://<base_url>/api/v1/users/<user_id>`` 
+
 Action: ``DELETE`` 
+
 Authorization: True 
 
-**Bucketlist Endpoints**
+#### Bucketlist Endpoints
 
-*Add new bucketlist*
+###### Add new bucketlist
+
 Url: ``http://<base_url>/api/v1/bucketlists`` 
+
 Action: ``POST`` 
+
 Data  
 ```javascript
     {'name': 'Bucketlist Name'}
@@ -127,40 +147,59 @@ Response
 ``` 
 Authorization: True 
 
-*Get all bucketlists*
+###### Get all bucketlists
+
 Url: ``http://<base_url>/api/v1/bucketlists`` 
+
 Action: ``GET`` 
+
 Authorization: True 
 
-*Get a bucketlist* 
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+###### Get a bucketlist 
+
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>``
+ 
 Action: ``GET`` 
+
 Authorization: True 
 
-*Edit a bucketlist*
+###### Edit a bucketlist
+
 Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+
 Action: ``PUT`` 
+
 Data
 ```javascript
     {'name': 'Bucketlist Name'}
 ``` 
-Response 
+Response
 *Updated bucketlist object* 
+
 Authorization: True 
 
-*Delete a bucketlist*
+###### Delete a bucketlist
+
 Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>`` 
+
 Action: ``DELETE`` 
+
 Authorization: True 
 
-*Search bucketlists by name*
+###### Search bucketlists by name
+
 Url: ``http://<base_url>/api/v1/bucketlists?q=<search_term>`` 
+
 Action: ``GET`` 
+
 Authorization: True
  
-*Paginate bucketlist*
+###### Paginate bucketlist
+
 Url: ``http://<base_url>/api/v1/bucketlists?limit=<page_size>``
+
 Action: ``GET``
+
 Response
 ```javascript
 {
@@ -190,11 +229,14 @@ Response
 ```
 Authorization: True
 
-**Bucketlist Item Endpoints**
+#### Bucketlist Item Endpoints
 
-*Add new bucketlist item*
+###### Add new bucketlist item
+
 Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
+
 Action: ``POST`` 
+
 Data
 ```javascript
 {'name': 'Item Name'}
@@ -205,38 +247,51 @@ Response
 ``` 
 Authorization: True 
 
-*Get all bucketlist items*
+###### Get all bucketlist items
+
 Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`` 
+
 Action: ``GET`` 
+
 Authorization: True 
 
-*Get a bucketlist item*
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
+###### Get a bucketlist item
+
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>``
+ 
 Action: ``GET`` 
+
 Authorization: True 
 
-*Edit a bucketlist item*
-Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
+###### Edit a bucketlist item
+
+Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>``
+ 
 Action: ``PUT`` 
+
 Data (*done can be True for completed or False for incomplete*) 
 ```javascript
 {'name': 'Bucketlist Name', 'done': True}
 ``` 
 Response 
 *Updated item object* 
+
 Authorization: True 
 
-*Delete a bucketlist item*
+###### Delete a bucketlist item
+
 Url: ``http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`` 
+
 Action: ``DELETE`` 
+
 Authorization: True 
 
-Automated Tests
----------------
-*Run tests*
+## Automated Tests
+
+###### Run tests
 
 `nosetests --rednose`
 
-*Run tests coverage*
+###### Run tests coverage
 
 `nosetests --rednose --with-coverage --cover-inclusive --cover-package=bucketlist --cover-erase --cover-html`
