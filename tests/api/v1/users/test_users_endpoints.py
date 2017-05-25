@@ -64,7 +64,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         response = self.client().get('/api/v1/users/20', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(result['message'], 'User with id#20 not found.')
 
     def test_delete_endpoint_deletes_a_user_using_a_users_id(self):
@@ -83,7 +83,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         response = self.client().get('/api/v1/users/20', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(result['message'], 'User with id#20 not found.')
 
     def test_edit_updates_a_user_object(self):
@@ -138,7 +138,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         result = json.loads(response.data.decode())
         updated_user = User.query.get(1)
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(result.get('message'),
                          "Failed to update user -> Incorrect old password or new passwords don't match.")
         self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
@@ -153,7 +153,7 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         result = json.loads(response.data.decode())
         updated_user = User.query.get(1)
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(result.get('message'),
                          "Failed to update user -> Incorrect old password or new passwords don't match.")
         self.assertFalse(updated_user.check_password(update_fields.get('new_password')))

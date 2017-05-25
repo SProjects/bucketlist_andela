@@ -27,7 +27,7 @@ class BucketListEndpoint(Resource):
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=current_user).first()
         if bucketlist:
             return bucketlist, 200
-        abort(403, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
+        abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
 
     @auth.login_required
     @marshal_with(bucketlist_fields)
@@ -101,7 +101,7 @@ class BucketLists(Resource):
                 response = {'message': 'Bucketlist created successfully.'}
                 return response, 201
             except Exception as e:
-                abort(401, message='Failed to create new bucketlist -> {}'.format(e.message))
+                abort(400, message='Failed to create new bucketlist -> {}'.format(e.message))
         else:
             abort(403, message='You are not authenticated. Login.')
 

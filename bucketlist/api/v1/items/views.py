@@ -20,7 +20,7 @@ class ItemEndpoint(Resource):
     def get(self, bucketlist_id, item_id):
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
-            return abort(403, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            return abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
 
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
@@ -38,7 +38,7 @@ class ItemEndpoint(Resource):
 
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
-            return abort(403, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            return abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
 
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
@@ -55,7 +55,7 @@ class ItemEndpoint(Resource):
     def delete(self, bucketlist_id, item_id):
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
-            return abort(403, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            return abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
 
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
@@ -76,7 +76,7 @@ class ItemsList(Resource):
             items = bucketlist.items
             return marshal(items, item_fields), 200
         else:
-            abort(403, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
 
     @auth.login_required
     def post(self, bucketlist_id):
@@ -95,4 +95,4 @@ class ItemsList(Resource):
             except Exception as e:
                 abort(400, message='Failed to create item -> {}'.format(e.message))
         else:
-            abort(403, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))

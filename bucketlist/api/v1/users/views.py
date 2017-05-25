@@ -22,7 +22,7 @@ class UserEndpoint(Resource):
         if user:
             return user
         else:
-            abort(401, message='User with id#{} not found.'.format(user_id))
+            abort(400, message='User with id#{} not found.'.format(user_id))
 
     @auth.login_required
     @marshal_with(user_fields)
@@ -56,7 +56,7 @@ class UserEndpoint(Resource):
                 current_user.save()
                 return current_user, 200
             except Exception as e:
-                abort(401, message='Failed to update user -> {}'.format(e.message))
+                abort(400, message='Failed to update user -> {}'.format(e.message))
         else:
             abort(403, message='You can\'t edit another user\'s data.')
 
@@ -68,7 +68,7 @@ class UserEndpoint(Resource):
             response = {'message': 'User with id#{} successfully deleted.'.format(user_id)}
             return response
         else:
-            abort(401, message='User with id#{} not found.'.format(user_id))
+            abort(400, message='User with id#{} not found.'.format(user_id))
 
 
 class UserList(Resource):
