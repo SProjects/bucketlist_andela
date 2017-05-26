@@ -34,9 +34,9 @@ Bucketlist is an API powered application that helps its users to create bucketli
 
 #### Authorization
 
-- Using the authentication endpoint get a token to send as a username 
-in basic authentication parameters.
-- OR Use your username and password as parameters for basic 
+- Using the authentication endpoint get a token which you send in place of
+the username in the basic authentication parameters.
+- OR Use the username(email of user) and password as parameters for basic 
 authentication
 
 
@@ -44,19 +44,19 @@ authentication
 
 Url: `http://<base_url>/api/v1/auth/register`  
 Action: `POST`  
-Data   
+Post data:   
 ```javascript 
-{
-    'first_name': 'FirstName', 
-    'last_name': 'LastName', 
-    'email': 'email@address.com', 
-    'password': 'good_password', 
-    'password_confirm': 'good_password'
-}
+    {
+        'first_name': 'FirstName', 
+        'last_name': 'LastName', 
+        'email': 'email@address.com', 
+        'password': 'good_password', 
+        'password_confirm': 'good_password'
+    }
 ``` 
-Response  
+Response:  
 ```javascript
-{'message': 'You registered successfully.'}
+    {'message': 'You registered successfully.'}
 ``` 
 Authorization: False 
 
@@ -64,14 +64,14 @@ Authorization: False
 
 Url: `http://<base_url>/api/v1/auth/login`  
 Action: `POST`  
-Data    
+Post data:    
 ```javascript
     {
         'email': 'email@address.com', 
         'password': 'good_password'
     }
 ``` 
-Response   
+Response:   
 ```javascript
     {'token': 'alphanumeric_string'}
 ``` 
@@ -83,19 +83,43 @@ Authorization: False
 
 Url: `http://<base_url>/api/v1/users`  
 Action: `GET`  
+Response:
+```javascript 
+    {
+        'results': [
+            {
+                'first_name': 'FirstName', 
+                'last_name': 'LastName', 
+                'email': 'email@address.com', 
+                'password': 'good_password', 
+                'password_confirm': 'good_password'
+            }
+        ]
+    }
+``` 
 Authorization: True  
 
 ##### Get a user
 
 Url: `http://<base_url>/api/v1/users/<user_id>`  
 Action: `GET`  
+Response:   
+```javascript 
+    {
+        'first_name': 'FirstName', 
+        'last_name': 'LastName', 
+        'email': 'email@address.com', 
+        'password': 'good_password', 
+        'password_confirm': 'good_password'
+    }
+``` 
 Authorization: True  
 
 ##### Edit a user
 
 Url: `http://<base_url>/api/v1/users/<user_id>`  
 Action: `PUT`  
-Data  
+Put data:  
 ```javascript
     {
         'first_name': 'updated_first_name',
@@ -114,6 +138,7 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/users/<user_id>`  
 Action: `DELETE`  
+Response: `{'message': 'User with id#<user_id> successfully deleted.'}`  
 Authorization: True  
 
 #### Bucketlist Endpoints
@@ -122,7 +147,7 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists`  
 Action: `POST`  
-Data  
+Post data:  
 ```javascript
     {'name': 'Bucketlist Name'}
 ``` 
@@ -136,23 +161,64 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists`  
 Action: `GET`  
+```javascript
+    {
+      'results': [
+        {
+          'created_by': 1,
+          'date_created': 'Tue, 23 May 2017 10:59:06 -0000',
+          'date_modified': 'Tue, 23 May 2017 12:26:50 -0000',
+          'id': 1,
+          'items': [
+            {
+              'date_created': 'Tue, 23 May 2017 14:25:13 -0000',
+              'date_modified': 'Tue, 23 May 2017 14:25:13 -0000',
+              'done': false,
+              'id': 1,
+              'name': 'To do item'
+            }
+          ],
+          'name': 'Bucketlist name'
+        }
+      ]
+    }
+```
 Authorization: True  
 
 ##### Get a bucketlist 
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>`  
 Action: `GET`  
+Response:   
+```javascript
+    {
+      'created_by': 1,
+      'date_created': 'Tue, 23 May 2017 10:59:06 -0000',
+      'date_modified': 'Tue, 23 May 2017 12:26:50 -0000',
+      'id': 1,
+      'items': [
+        {
+          'date_created': 'Tue, 23 May 2017 14:25:13 -0000',
+          'date_modified': 'Tue, 23 May 2017 14:25:13 -0000',
+          'done': false,
+          'id': 1,
+          'name': 'To do item'
+        }
+      ],
+      'name': 'Bucketlist name'
+    }
+```
 Authorization: True  
 
 ##### Edit a bucketlist
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>`  
 Action: `PUT`  
-Data  
+Post data:   
 ```javascript
     {'name': 'Bucketlist Name'}
 ``` 
-Response  
+Response:  
 *Updated bucketlist object*   
 Authorization: True 
 
@@ -160,43 +226,68 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>`  
 Action: `DELETE`  
-Authorization: True  
+Response: `{'message': 'Bucketlist with ID#<bucketlist_id> successfully deleted.'`  
+Authorization: True   
+
 ##### Search bucketlists by name
 
 Url: `http://<base_url>/api/v1/bucketlists?q=<search_term>`   
 Action: `GET`  
+Response:   
+```javascript
+    {
+      'results': [
+        {
+          'created_by': 1,
+          'date_created': 'Tue, 23 May 2017 10:59:06 -0000',
+          'date_modified': 'Tue, 23 May 2017 12:26:50 -0000',
+          'id': 1,
+          'items': [
+            {
+              'date_created': 'Tue, 23 May 2017 14:25:13 -0000',
+              'date_modified': 'Tue, 23 May 2017 14:25:13 -0000',
+              'done': false,
+              'id': 1,
+              'name': 'To do item'
+            }
+          ],
+          'name': 'Bucketlist name'
+        }
+      ]
+    }
+```
 Authorization: True  
 
 ##### Paginate bucketlist
 
 Url: `http://<base_url>/api/v1/bucketlists?limit=<page_size>`  
 Action: `GET`  
-Response:  
+Response:    
 ```javascript
-{
-  "data": [
     {
-      "created_by": 1,
-      "date_created": "Tue, 23 May 2017 10:59:06 -0000",
-      "date_modified": "Tue, 23 May 2017 12:26:50 -0000",
-      "id": 1,
-      "items": [
+      'results': [
         {
-          "date_created": "Tue, 23 May 2017 14:25:13 -0000",
-          "date_modified": "Tue, 23 May 2017 14:25:13 -0000",
-          "done": false,
-          "id": 1,
-          "name": "To do item"
+          'created_by': 1,
+          'date_created': 'Tue, 23 May 2017 10:59:06 -0000',
+          'date_modified': 'Tue, 23 May 2017 12:26:50 -0000',
+          'id': 1,
+          'items': [
+            {
+              'date_created': 'Tue, 23 May 2017 14:25:13 -0000',
+              'date_modified': 'Tue, 23 May 2017 14:25:13 -0000',
+              'done': false,
+              'id': 1,
+              'name': 'To do item'
+            }
+          ],
+          'name': 'Bucketlist name'
         }
       ],
-      "name": "Bucketlist name"
+      'next': '/api/v1/bucketlists?limit=1&page=1',
+      'num_results': 2,
+      'page': 1,
+      'total_pages': 2
     }
-  ],
-  "next": "/api/v1/bucketlists?limit=1&page=1",
-  "num_results": 2,
-  "page": 1,
-  "total_pages": 2
-}
 ```
 Authorization: True  
 
@@ -206,7 +297,7 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`   
 Action: `POST`  
-Data  
+Post data:  
 ```javascript
 {'name': 'Item Name'}
 ``` 
@@ -220,12 +311,36 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items`  
 Action: `GET`  
+Response:   
+```javascript
+    {
+      'results': [
+        {
+          'date_created': 'Tue, 23 May 2017 14:25:13 -0000',
+          'date_modified': 'Tue, 23 May 2017 14:25:13 -0000',
+          'done': false,
+          'id': 1,
+          'name': 'To do item'
+        }
+      ]
+    }
+```
 Authorization: True 
 
 ##### Get a bucketlist item
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`  
 Action: `GET`  
+Response:   
+```javascript
+    {
+      'date_created': 'Tue, 23 May 2017 14:25:13 -0000',
+      'date_modified': 'Tue, 23 May 2017 14:25:13 -0000',
+      'done': false,
+      'id': 1,
+      'name': 'To do item'
+    }
+```
 Authorization: True 
 
 ##### Edit a bucketlist item
@@ -234,7 +349,7 @@ Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`
 Action: `PUT`  
 Data (*done can be True for completed or False for incomplete*)  
 ```javascript
-{'name': 'Bucketlist Name', 'done': True}
+    {'name': 'Bucketlist Name', 'done': True}
 ``` 
 Response:  
 *Updated item object*   
@@ -244,6 +359,7 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`  
 Action: `DELETE`  
+Response: `{'message': 'Item with ID#1 deleted successfully.'}`   
 Authorization: True  
 
 ## Automated Tests
