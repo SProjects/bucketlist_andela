@@ -31,10 +31,10 @@ class ItemEndpoint(Resource):
     @marshal_with(item_fields)
     def put(self, bucketlist_id, item_id):
         parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, help='Item name is required', required=True)
-        parser.add_argument('done', type=str, help='Item status', required=False)
+        parser.add_argument('name', type=str)
+        parser.add_argument('done', type=str)
         arguments = parser.parse_args()
-        name, done = arguments.get('name'), arguments.get('done', False)
+        name, done = arguments.get('name') or None, arguments.get('done') or None
 
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
@@ -43,8 +43,8 @@ class ItemEndpoint(Resource):
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
             try:
-                item.name = name
-                item.done = done
+                item.name = name if name is not None else item.name
+                item.done = bool(done) if done is not None else item.done
                 item.save()
                 return item, 200
             except Exception as e:
