@@ -359,7 +359,7 @@ Authorization: True
 
 Url: `http://<base_url>/api/v1/bucketlists/<bucketlist_id>/items/<item_id>`  
 Action: `DELETE`  
-Response: `{'message': 'Item with ID#1 deleted successfully.'}`   
+Response: `{'message': 'Item with ID#<item_id> deleted successfully.'}`   
 Authorization: True  
 
 ## Automated Tests
