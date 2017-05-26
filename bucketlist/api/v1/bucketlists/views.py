@@ -70,24 +70,21 @@ class BucketLists(Resource):
         page = arguments.get('page') or 0
 
         current_user = g.user
-        if current_user:
-            if search_term is not None:
-                bucketlists = Bucketlist.query.\
-                    filter(Bucketlist.name.like('%' + search_term + '%'),
-                           Bucketlist.user == current_user).order_by(desc(Bucketlist.created_at)).all()
-                return dict(results=marshal(bucketlists, bucketlist_fields)), 200
+        if search_term is not None:
+            bucketlists = Bucketlist.query.\
+                filter(Bucketlist.name.like('%' + search_term + '%'),
+                       Bucketlist.user == current_user).order_by(desc(Bucketlist.created_at)).all()
+            return dict(results=marshal(bucketlists, bucketlist_fields)), 200
 
-            if page_size is None:
-                bucketlists = Bucketlist.query.filter_by(user=current_user).\
-                    order_by(desc(Bucketlist.created_at)).all()
-                response = dict(results=marshal(bucketlists, bucketlist_fields))
-            else:
-                page = int(page)
-                page_size = int(page_size) if int(page_size) < Config.MAX_PAGE_SIZE else Config.MAX_PAGE_SIZE
-                response = self._paginate(page, page_size, current_user)
-            return response, 200
+        if page_size is None:
+            bucketlists = Bucketlist.query.filter_by(user=current_user).\
+                order_by(desc(Bucketlist.created_at)).all()
+            response = dict(results=marshal(bucketlists, bucketlist_fields))
         else:
-            abort(403, message='You are not authenticated. Login.')
+            page = int(page)
+            page_size = int(page_size) if int(page_size) < Config.MAX_PAGE_SIZE else Config.MAX_PAGE_SIZE
+            response = self._paginate(page, page_size, current_user)
+        return response, 200
 
     @auth.login_required
     def post(self):
@@ -97,16 +94,13 @@ class BucketLists(Resource):
         name = arguments.get('name')
 
         current_user = g.user
-        if current_user:
-            try:
-                bucketlist = Bucketlist(name=name, user=current_user)
-                bucketlist.save()
-                response = {'message': 'Bucketlist created successfully.'}
-                return response, 201
-            except Exception as e:
-                abort(400, message='Failed to create new bucketlist -> {}'.format(e.message))
-        else:
-            abort(403, message='You are not authenticated. Login.')
+        try:
+            bucketlist = Bucketlist(name=name, user=current_user)
+            bucketlist.save()
+            response = {'message': 'Bucketlist created successfully.'}
+            return response, 201
+        except Exception as e:
+            abort(400, message='Failed to create new bucketlist -> {}'.format(e.message))
 
     def _paginate(self, page, page_size, current_user):
         num_results = Bucketlist.query.filter(Bucketlist.user == current_user).count()
