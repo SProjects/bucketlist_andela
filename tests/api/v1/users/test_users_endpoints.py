@@ -39,12 +39,12 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
     def test_returns_all_users(self):
         self.add_users()
         response = self.client().get('/api/v1/users', headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data.decode()).get('results')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)
 
-    def test_returns_empty_list_if_there_are_no_users(self):
+    def test_returns_401_error_if_there_are_no_users(self):
         response = self.client().get('/api/v1/users', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
 

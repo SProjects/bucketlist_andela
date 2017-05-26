@@ -64,7 +64,7 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.client().post('/api/v1/auth/register', data=self.user_data)
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists', headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data.decode()).get('results')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 3)
@@ -115,7 +115,7 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
 
         response = self.client().get('/api/v1/bucketlists?q=Bucketlist',
                                      headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data.decode()).get('results')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 3)
@@ -135,6 +135,6 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         result = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 200)
-        expected_result = sorted(['data', 'next', 'total_pages', 'page', 'num_results'])
+        expected_result = sorted(['results', 'next', 'total_pages', 'page', 'num_results'])
         self.assertListEqual(sorted(result.keys()), expected_result)
-        self.assertEqual(len(result.get('data')), 1)
+        self.assertEqual(len(result.get('results')), 1)

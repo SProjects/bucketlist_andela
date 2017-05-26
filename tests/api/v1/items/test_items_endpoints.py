@@ -71,7 +71,7 @@ class TestItemsEndpoints(TestCase, UnitTestCase):
 
         response = self.client().get('/api/v1/bucketlists/1/items',
                                      headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data.decode()).get('results')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)

@@ -35,7 +35,7 @@ class ItemEndpoint(Resource):
     def put(self, bucketlist_id, item_id):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str)
-        parser.add_argument('done', type=str)
+        parser.add_argument('done', type=bool)
         arguments = parser.parse_args()
         name, done = arguments.get('name') or None, arguments.get('done') or None
 
@@ -48,7 +48,7 @@ class ItemEndpoint(Resource):
         if item:
             try:
                 item.name = name if name is not None else item.name
-                item.done = bool(done) if done is not None else item.done
+                item.done = done if done is not None else item.done
                 item.save()
                 return item, 200
             except Exception as e:
@@ -66,7 +66,7 @@ class ItemEndpoint(Resource):
         if item:
             try:
                 item.delete()
-                response = {'message': 'Item with ID#1 deleted successfully.'.format(item_id)}
+                response = {'message': 'Item with ID#{} deleted successfully.'.format(item_id)}
                 return response, 200
             except Exception as e:
                 return abort(400, message='Failed to delete item -> {}'.format(e.message))
@@ -80,7 +80,7 @@ class ItemsList(Resource):
         if bucketlist:
             items = Item.query.filter_by(bucketlist=bucketlist).\
                 order_by(desc(Item.created_at)).all()
-            return marshal(items, item_fields), 200
+            return dict(results=marshal(items, item_fields)), 200
         else:
             abort(400, message='Bucketlist of ID#{} not found or does not '
                                'belong to you.'.format(bucketlist_id))

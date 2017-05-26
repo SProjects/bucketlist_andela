@@ -76,4 +76,4 @@ class UserList(Resource):
     @auth.login_required
     def get(self):
         users = User.query.order_by(desc(User.created_at)).all()
-        return marshal(users, user_fields)
+        return dict(results=marshal(users, user_fields)), 200

@@ -75,12 +75,12 @@ class BucketLists(Resource):
                 bucketlists = Bucketlist.query.\
                     filter(Bucketlist.name.like('%' + search_term + '%'),
                            Bucketlist.user == current_user).order_by(desc(Bucketlist.created_at)).all()
-                return marshal(bucketlists, bucketlist_fields), 200
+                return dict(results=marshal(bucketlists, bucketlist_fields)), 200
 
             if page_size is None:
                 bucketlists = Bucketlist.query.filter_by(user=current_user).\
                     order_by(desc(Bucketlist.created_at)).all()
-                response = marshal(bucketlists, bucketlist_fields)
+                response = dict(results=marshal(bucketlists, bucketlist_fields))
             else:
                 page = int(page)
                 page_size = int(page_size) if int(page_size) < Config.MAX_PAGE_SIZE else Config.MAX_PAGE_SIZE
@@ -125,5 +125,5 @@ class BucketLists(Resource):
         if (page + 1) < total_pages:
             navigation['next'] = url_for('bucketlists.bucketlists_endpoint') + '?limit={}&page={}'.format(page_size,
                                                                                                           page + 1)
-        result = dict(data=marshal(bucketlists, bucketlist_fields))
+        result = dict(results=marshal(bucketlists, bucketlist_fields))
         return dict(list(result.items()) + list(navigation.items()))
