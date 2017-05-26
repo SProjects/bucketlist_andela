@@ -1,5 +1,6 @@
 from flask import g
 from flask_restful import Resource, fields, marshal_with, marshal, abort, reqparse
+from sqlalchemy import desc
 
 from bucketlist.models.user import User
 from bucketlist import auth
@@ -74,5 +75,5 @@ class UserEndpoint(Resource):
 class UserList(Resource):
     @auth.login_required
     def get(self):
-        users = User.query.all()
+        users = User.query.order_by(desc(User.created_at)).all()
         return marshal(users, user_fields)

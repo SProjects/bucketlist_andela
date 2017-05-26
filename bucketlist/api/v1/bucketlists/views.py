@@ -1,6 +1,7 @@
 from flask import g
 from flask import url_for
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
+from sqlalchemy import desc
 
 from math import ceil
 
@@ -71,12 +72,14 @@ class BucketLists(Resource):
         current_user = g.user
         if current_user:
             if search_term is not None:
-                bucketlists = Bucketlist.query.filter(Bucketlist.name.like('%' + search_term + '%'),
-                                                      Bucketlist.user == current_user).all()
+                bucketlists = Bucketlist.query.\
+                    filter(Bucketlist.name.like('%' + search_term + '%'),
+                           Bucketlist.user == current_user).order_by(desc(Bucketlist.created_at)).all()
                 return marshal(bucketlists, bucketlist_fields), 200
 
             if page_size is None:
-                bucketlists = Bucketlist.query.filter_by(user=current_user).all()
+                bucketlists = Bucketlist.query.filter_by(user=current_user).\
+                    order_by(desc(Bucketlist.created_at)).all()
                 response = marshal(bucketlists, bucketlist_fields)
             else:
                 page = int(page)
@@ -109,8 +112,8 @@ class BucketLists(Resource):
         num_results = Bucketlist.query.filter(Bucketlist.user == current_user).count()
 
         total_pages = int(ceil(float(num_results) / float(page_size)))
-        bucketlists = Bucketlist.query.filter(Bucketlist.user == current_user).limit(page_size).offset(
-            page * page_size).all()
+        bucketlists = Bucketlist.query.filter(Bucketlist.user == current_user).\
+            order_by(desc(Bucketlist.created_at)).limit(page_size).offset(page * page_size).all()
 
         navigation = {'total_pages': total_pages, 'num_results': num_results, 'page': page + 1}
         if page == 1:

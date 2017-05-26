@@ -1,5 +1,7 @@
 from flask import g
+
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
+from sqlalchemy import desc
 
 from bucketlist import auth
 from bucketlist.models.item import Item
@@ -20,7 +22,8 @@ class ItemEndpoint(Resource):
     def get(self, bucketlist_id, item_id):
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
-            return abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
+            return abort(400, message='Bucketlist of ID#{} not found or does '
+                                      'not belong to you.'.format(bucketlist_id))
 
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
@@ -38,7 +41,8 @@ class ItemEndpoint(Resource):
 
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
-            return abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
+            return abort(400, message='Bucketlist of ID#{} not found or does not '
+                                      'belong to you.'.format(bucketlist_id))
 
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
@@ -55,7 +59,8 @@ class ItemEndpoint(Resource):
     def delete(self, bucketlist_id, item_id):
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:
-            return abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
+            return abort(400, message='Bucketlist of ID#{} not found or does not '
+                                      'belong to you.'.format(bucketlist_id))
 
         item = Item.query.filter_by(id=item_id, bucketlist=bucketlist).first()
         if item:
@@ -73,10 +78,12 @@ class ItemsList(Resource):
     def get(self, bucketlist_id):
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist:
-            items = bucketlist.items
+            items = Item.query.filter_by(bucketlist=bucketlist).\
+                order_by(desc(Item.created_at)).all()
             return marshal(items, item_fields), 200
         else:
-            abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
+            abort(400, message='Bucketlist of ID#{} not found or does not '
+                               'belong to you.'.format(bucketlist_id))
 
     @auth.login_required
     def post(self, bucketlist_id):
@@ -90,9 +97,11 @@ class ItemsList(Resource):
             try:
                 item = Item(name=name, bucketlist=bucketlist)
                 item.save()
-                response = {'message': 'Item successfully added to Bucketlist ID#{}'.format(bucketlist_id)}
+                response = {'message': 'Item successfully added to Bucketlist '
+                                       'ID#{}'.format(bucketlist_id)}
                 return response, 201
             except Exception as e:
                 abort(400, message='Failed to create item -> {}'.format(e.message))
         else:
-            abort(400, message='Bucketlist of ID#{} not found or does not belong to you.'.format(bucketlist_id))
+            abort(400, message='Bucketlist of ID#{} not found or does not '
+                               'belong to you.'.format(bucketlist_id))
