@@ -32,6 +32,11 @@ Bucketlist is an API powered application that helps its users to create bucketli
 
 ## Usage
 
+#### Tools to call the API
+
+1. [Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop)
+2. [curl](https://curl.haxx.se/docs/manual.html)
+
 #### Authorization
 
 - Using the authentication endpoint get a token which you send in place of
