@@ -1,0 +1,21 @@
+{
+  "name": "BucketlistClient",
+  "homepage": "https://github.com/SProjects/bucketlist_andela",
+  "authors": [
+    "Sebuuma Daniel <sedzsoft@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "semantic": "semantic-ui#^2.2.10"
+  }
+}

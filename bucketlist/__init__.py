@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
@@ -10,10 +12,14 @@ auth = HTTPBasicAuth()
 
 
 def create_app(env_name):
-    app = Flask(__name__)
+    app = Flask(__name__, static_url_path='/static',
+                static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__), 'client/static/')))
     app.config.from_object(configuration[env_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+
+    from main.views import main as main_blueprint
+    app.register_blueprint(main_blueprint, url_prefix='/')
 
     from api.v1.auth import auth as auth_v1_blueprint
     api_v1 = Api(auth_v1_blueprint)
