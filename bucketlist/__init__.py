@@ -13,7 +13,7 @@ auth = HTTPBasicAuth()
 
 def create_app(env_name):
     app = Flask(__name__, static_url_path='/static',
-                static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__), 'client/static/')))
+                static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'client/static'))
     app.config.from_object(configuration[env_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
