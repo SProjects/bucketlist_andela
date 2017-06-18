@@ -16,16 +16,10 @@ class TestBucketListEndpoints(BaseTestCase):
         self.bucketlist_data = {'name': 'Bucket List Name'}
 
     def test_post_adds_new_bucketlist(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
-        login_credentials = dict(email=self.user_data.get('email'),
-                                 password=self.user_data.get('password'))
-        response = self.client().post('/api/v1/auth/login', data=login_credentials)
-        result = json.loads(response.data.decode())
-        token = result['token']
-
-        response = self.client().post('/api/v1/bucketlists', data=self.bucketlist_data,
-                                      headers=self.token_headers(token))
-        result = json.loads(response.data.decode())
+        self.add_user()
+        response = self.client().post('/api/v1/bucketlists', data=json.dumps(self.bucketlist_data),
+                                      headers=self.authorization_headers())
+        result = json.loads(response.data)
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(len(Bucketlist.query.all()), 1)
@@ -35,7 +29,7 @@ class TestBucketListEndpoints(BaseTestCase):
         self.add_user()
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists', headers=self.authorization_headers())
-        result = json.loads(response.data.decode()).get('results')
+        result = json.loads(response.data).get('results')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(result), 2)
@@ -44,7 +38,7 @@ class TestBucketListEndpoints(BaseTestCase):
         self.add_user()
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists/1', headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
 
         expected_list = sorted(['id', 'name', 'items', 'date_created', 'date_modified', 'created_by'])
         self.assertEqual(response.status_code, 200)
@@ -55,14 +49,14 @@ class TestBucketListEndpoints(BaseTestCase):
         self.add_user()
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists/1', headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
 
         self.assertEqual(result.get('name'), 'Bucketlist One')
 
         update_fields = {'name': 'Visit Bali'}
-        response = self.client().put('/api/v1/bucketlists/1', data=update_fields,
+        response = self.client().put('/api/v1/bucketlists/1', data=json.dumps(update_fields),
                                      headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('name'), update_fields.get('name'))
@@ -78,9 +72,9 @@ class TestBucketListEndpoints(BaseTestCase):
         other_user_auth = {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
 
         update_fields = {'name': 'Visit Bali'}
-        response = self.client().put('/api/v1/bucketlists/1', data=update_fields,
+        response = self.client().put('/api/v1/bucketlists/1', data=json.dumps(update_fields),
                                      headers=other_user_auth)
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found or not yours.')
@@ -93,7 +87,7 @@ class TestBucketListEndpoints(BaseTestCase):
 
         response = self.client().delete('/api/v1/bucketlists/1',
                                         headers=self.authorization_headers())
-        result = json.loads(response.data.decode())
+        result = json.loads(response.data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 successfully deleted.')
         self.assertEqual(len(Bucketlist.query.all()), 1)

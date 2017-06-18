@@ -1,4 +1,5 @@
 from flask import g
+from flask import request
 from flask import url_for
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
 from sqlalchemy import desc
@@ -33,9 +34,7 @@ class BucketListEndpoint(Resource):
     @auth.login_required
     @marshal_with(bucketlist_fields)
     def put(self, bucketlist_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, help='Bucketlist name is required', required=True)
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
         name = arguments.get('name')
 
         current_user = g.user
@@ -91,9 +90,7 @@ class BucketLists(Resource):
 
     @auth.login_required
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, help='Bucketlist name is required', required=True)
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
         name = arguments.get('name')
 
         current_user = g.user

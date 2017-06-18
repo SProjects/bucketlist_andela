@@ -1,5 +1,6 @@
 from flask import g
-from flask_restful import reqparse, abort, Resource
+from flask import request
+from flask_restful import abort, Resource
 
 from bucketlist.models.user import User
 from bucketlist.utils.utilities import validate
@@ -7,14 +8,7 @@ from bucketlist.utils.utilities import validate
 
 class RegisterUser(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('first_name', type=str, help='First name is required', required=True)
-        parser.add_argument('last_name', type=str, help='Last name is required', required=True)
-        parser.add_argument('email', type=str, help='Email is required', required=True)
-        parser.add_argument('password', type=str, help='Password is required', required=True)
-        parser.add_argument('password_confirm', type=str, help='Password confirmation is required', required=True)
-
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
 
         first_name, last_name = arguments.get('first_name'), arguments.get('last_name')
         email, password = arguments.get('email'), arguments.get('password')
@@ -38,11 +32,7 @@ class RegisterUser(Resource):
 
 class AuthenticateUser(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str, help='Email is required', required=True)
-        parser.add_argument('password', type=str, help='Password is required', required=True)
-
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
         email, password = arguments.get('email'), arguments.get('password')
 
         if validate(email, password):
