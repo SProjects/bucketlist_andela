@@ -67,6 +67,24 @@ class TestUsersEndpoint(TestCase, UnitTestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result['message'], 'User with id#20 not found.')
 
+    def test_return_a_single_user_using_a_token(self):
+        self.add_users()
+        login_details = dict(email='first1@email.com', password='test_password')
+        auth_response = self.client().post('/api/v1/auth/login', data=login_details)
+        auth_token = json.loads(auth_response.data.decode()).get('token')
+
+        login_credentials = '{}:{}'.format(auth_token, 'test_password')
+        token_auth_header = {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
+
+        response = self.client().get('/api/v1/users/1?token=true', headers=token_auth_header)
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        actual = [result.get('first_name'), result.get('last_name'), result.get('email')]
+        expected = ['First1', 'Last1', 'first1@email.com']
+
+        self.assertListEqual(actual, expected)
+
     def test_delete_endpoint_deletes_a_user_using_a_users_id(self):
         self.add_users()
         self.assertEqual(len(User.query.all()), 2)

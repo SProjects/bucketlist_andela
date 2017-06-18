@@ -19,6 +19,15 @@ class UserEndpoint(Resource):
     @marshal_with(user_fields)
     @auth.login_required
     def get(self, user_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument('token', type=bool)
+        arguments = parser.parse_args()
+
+        use_token = arguments.get('token') or None
+
+        if use_token:
+            return g.user
+
         user = User.query.get(user_id)
         if user:
             return user
