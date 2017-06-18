@@ -75,7 +75,7 @@ class BucketLists(Resource):
         current_user = g.user
         if search_term is not None:
             bucketlists = Bucketlist.query.\
-                filter(Bucketlist.name.like('%' + search_term + '%'),
+                filter(Bucketlist.name.ilike('%' + search_term + '%'),
                        Bucketlist.user == current_user).order_by(desc(Bucketlist.created_at)).all()
             return dict(results=marshal(bucketlists, bucketlist_fields)), 200
 
