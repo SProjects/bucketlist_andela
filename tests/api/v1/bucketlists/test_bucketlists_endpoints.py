@@ -1,49 +1,19 @@
-from flask_testing import TestCase
-
 import json
 import base64
-from unittest import TestCase as UnitTestCase
 
-import bucketlist
 from bucketlist.models.bucketlist import Bucketlist
 from bucketlist.models.user import User
+from tests.base_test_case import BaseTestCase
 
 
-class TestBucketListEndpoints(TestCase, UnitTestCase):
-    def create_app(self):
-        return bucketlist.create_app('testing')
-
-    def add_bucketlists(self):
-        bucketlist_1 = Bucketlist(name='Bucketlist One', user_id=1)
-        bucketlist_2 = Bucketlist(name='Bucketlist Two', user_id=1)
-        bucketlist_3 = Bucketlist(name='Bucketlist Three', user_id=1)
-        bucketlist_1.save()
-        bucketlist_2.save()
-        bucketlist_3.save()
-
-    def authorization_headers(self):
-        login_credentials = '{}:{}'.format('first@email.com', 'test_password')
-        return {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
-
+class TestBucketListEndpoints(BaseTestCase):
     def token_headers(self, token):
         login_credentials = '{}:{}'.format(token, 'unused_password')
         return {'Authorization': 'Basic ' + base64.b64encode(login_credentials)}
 
     def setUp(self):
-        self.app = self.create_app()
-        self.client = self.app.test_client
-        self.user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@email.com',
-                          'password': 'test_password', 'password_confirm': 'test_password'}
+        super(TestBucketListEndpoints, self).setUp()
         self.bucketlist_data = {'name': 'Bucket List Name'}
-
-        with self.app.app_context():
-            bucketlist.db.session.close()
-            bucketlist.db.drop_all()
-            bucketlist.db.create_all()
-
-    def tearDown(self):
-        bucketlist.db.session.remove()
-        bucketlist.db.drop_all()
 
     def test_post_adds_new_bucketlist(self):
         self.client().post('/api/v1/auth/register', data=self.user_data)
@@ -62,16 +32,16 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(result['message'], 'Bucketlist created successfully.')
 
     def test_get_returns_all_bucketlists_for_user(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists', headers=self.authorization_headers())
         result = json.loads(response.data.decode()).get('results')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 2)
 
     def test_get_returns_one_bucketlist_if_id_is_specified(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
@@ -82,7 +52,7 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertListEqual([result.get('name'), result.get('created_by')], ['Bucketlist One', 1])
 
     def test_edit_updates_bucketlist_fields(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
         response = self.client().get('/api/v1/bucketlists/1', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
@@ -98,7 +68,7 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(result.get('name'), update_fields.get('name'))
 
     def test_edit_fails_to_update_bucketlist_if_it_does_not_belong_to_the_user(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
 
         other_user = User(first_name='Other', last_name='User', email='other@email.com', password='password')
@@ -116,23 +86,23 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found or not yours.')
 
     def test_delete_removes_bucketlist_from_database(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
 
-        self.assertEqual(len(Bucketlist.query.all()), 3)
+        self.assertEqual(len(Bucketlist.query.all()), 2)
 
         response = self.client().delete('/api/v1/bucketlists/1',
                                         headers=self.authorization_headers())
         result = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 successfully deleted.')
-        self.assertEqual(len(Bucketlist.query.all()), 2)
+        self.assertEqual(len(Bucketlist.query.all()), 1)
 
     def test_delete_fails_with_400_error_if_bucketlist_does_not_belong_to_the_user(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
 
-        self.assertEqual(len(Bucketlist.query.all()), 3)
+        self.assertEqual(len(Bucketlist.query.all()), 2)
 
         other_user = User(first_name='Other', last_name='User', email='other@email.com', password='password')
         other_user.save()
@@ -145,10 +115,10 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         result = json.loads(response.data.decode())
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result.get('message'), 'Bucketlist with ID#1 not found or not yours.')
-        self.assertEqual(len(Bucketlist.query.all()), 3)
+        self.assertEqual(len(Bucketlist.query.all()), 2)
 
     def test_search_returns_bucketlists_whose_name_matches_a_search_term(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
 
         response = self.client().get('/api/v1/bucketlists?q=Bucketlist',
@@ -156,7 +126,7 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         result = json.loads(response.data.decode()).get('results')
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 2)
 
         response = self.client().get('/api/v1/bucketlists?q=One', headers=self.authorization_headers())
         result = json.loads(response.data.decode())
@@ -165,7 +135,7 @@ class TestBucketListEndpoints(TestCase, UnitTestCase):
         self.assertEqual(len(result), 1)
 
     def test_pagination_of_bucketlists_when_you_pass_a_limit_parameter(self):
-        self.client().post('/api/v1/auth/register', data=self.user_data)
+        self.add_user()
         self.add_bucketlists()
 
         response = self.client().get('/api/v1/bucketlists?limit=1',
