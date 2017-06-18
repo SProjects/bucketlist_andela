@@ -35,7 +35,7 @@ class TestRegisterUser(TestCase, UnitTestCase):
         self.assertEqual(response.status_code, 201)
 
         second_response = self.client().post('/api/v1/auth/register', data=self.user_data)
-        self.assertEqual(second_response.status_code, 202)
+        self.assertEqual(second_response.status_code, 409)
 
         result = json.loads(second_response.data.decode())
         self.assertEqual(result['message'], 'User already exists. Login.')
