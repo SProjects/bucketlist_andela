@@ -38,22 +38,25 @@ class BucketListEndpoint(Resource):
         arguments = parser.parse_args()
         name = arguments.get('name')
 
-        bucketlist = Bucketlist.query.get(bucketlist_id)
+        current_user = g.user
+        bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=current_user).first()
         if bucketlist:
             bucketlist.name = name
             bucketlist.save()
             return bucketlist, 200
         else:
-            abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            abort(400, message='Bucketlist with ID#{} not found or not yours.'.format(bucketlist_id))
 
+    @auth.login_required
     def delete(self, bucketlist_id):
-        bucketlist = Bucketlist.query.get(bucketlist_id)
+        current_user = g.user
+        bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=current_user).first()
         if bucketlist:
             bucketlist.delete()
             response = {'message': 'Bucketlist with ID#{} successfully deleted.'.format(bucketlist_id)}
             return response, 200
         else:
-            abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            abort(400, message='Bucketlist with ID#{} not found or not yours.'.format(bucketlist_id))
 
 
 class BucketLists(Resource):
