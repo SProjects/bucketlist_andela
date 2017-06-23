@@ -1,0 +1,105 @@
+<div class="ui main container">
+    <div class="column">
+        <div class="ui grid">
+
+            <div class="row">
+                <div class="six wide column">
+                    <span class="ui header">
+                        Your Bucketlists
+                    </span>
+                </div>
+                <div class="right aligned ten wide column">
+                    <a class="ui tiny violet button" [class.disabled]="hasPrevious" (click)="getPrevious()">
+                        <i class="caret left icon"></i>
+                        Previous
+                    </a>
+                    <a class="ui tiny violet button" [class.disabled]="hasNext" (click)="getNext()">
+                        Next
+                        <i class="caret right icon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="row">
+                <div class="sixteen wide column">
+                    <div *ngIf="!!message" class="ui error message">
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="twelve wide column">
+                    <a routerLink="/new-bucketlist" class="ui tiny violet circular button">
+                        <i class="plus icon"></i>
+                        Add
+                    </a>
+                </div>
+                <div class="four wide column right aligned">
+                    <div class="ui fluid search left icon input">
+                        <i class="search icon"></i>
+                        <input placeholder="Search by name" [(ngModel)]="searchTerm" (ngModelChange)="search($event)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <div *ngFor="let bucketlist of bucketlists" class="ui clearing purple segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="six wide column">
+                                    <h3 class="ui header">{{ bucketlist.name }}</h3>
+                                </div>
+                                <div class="right aligned ten wide column">
+                                    <a (click)="viewDetails(bucketlist)" class="basic link"
+                                       title="Open">
+                                        <i class="folder open outline black icon"></i>
+                                    </a>
+                                    <a (click)="editBucketlist(bucketlist)" class="basic link" title="Edit">
+                                        <i class="edit black icon"></i>
+                                    </a>
+                                    <a (click)="deleteBucketlist(bucketlist)" class="basic link" title="Delete">
+                                        <i class="trash black icon"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="column">
+                                    <div class="ui three tiny statistics">
+                                        <div class="statistic">
+                                            <div class="value">
+                                                {{ totalItems(bucketlist) }}
+                                            </div>
+                                            <div class="label">
+                                                Total
+                                            </div>
+                                        </div>
+                                        <div class="statistic">
+                                            <div class="value">
+                                                {{ unfinishedItems(bucketlist) }}
+                                            </div>
+                                            <div class="label">
+                                                Unfinished
+                                            </div>
+                                        </div>
+                                        <div class="statistic">
+                                            <div class="value">
+                                                {{ finishedItems(bucketlist) }}
+                                            </div>
+                                            <div class="label">
+                                                Finished
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
