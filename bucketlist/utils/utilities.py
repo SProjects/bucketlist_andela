@@ -1,7 +1,7 @@
 from flask import g
 from flask_restful import abort
 
-from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
+from itsdangerous import (JSONWebSignatureSerializer as Serializer,
                           BadSignature, SignatureExpired)
 
 from bucketlist import auth
@@ -21,9 +21,9 @@ def validate(email_or_token, password):
 
 
 def verify_token(token):
-    s = Serializer(Config.SECRET_KEY)
+    serializer = Serializer(Config.SECRET_KEY)
     try:
-        data = s.loads(token)
+        data = serializer.loads(token)
     except SignatureExpired:
         return None
     except BadSignature:
