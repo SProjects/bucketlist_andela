@@ -2,35 +2,45 @@
     <div class="sixteen wide center aligned row">
         <div class="sixteen wide middle aligned column">
             <div class="ui centered padded grid">
-                <div class="ui eight wide column form segment">
-                    <div class="field centered">
-                        <img src="../../../../static/images/logo.png" alt="Bucketlist"
-                             class="ui middle aligned tiny image logo-name">
-                        <span class="logo-name">Bucketlist</span>
+                <div class="eight wide column">
+                    <div *ngIf="!!message" class="ui error message">
+                        {{ message }}
                     </div>
-                    <div class="two fields">
-                        <div class="field">
-                            <input type="text" name="firstName" placeholder="First Name" class="centered">
+                    <form class="ui eight wide column form segment" (ngSubmit)="createUser()">
+                        <div class="field centered">
+                            <img src="../../../../static/images/logo.png" alt="Bucketlist"
+                                 class="ui middle aligned tiny image logo-name">
+                            <span class="logo-name">Bucketlist</span>
+                        </div>
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" name="firstName" [(ngModel)]="model.first_name"
+                                       placeholder="First Name" class="centered" required>
+                            </div>
+                            <div class="field">
+                                <input type="text" name="lastName" [(ngModel)]="model.last_name"
+                                       placeholder="Last Name" class="centered" required>
+                            </div>
                         </div>
                         <div class="field">
-                            <input type="text" name="lastName" placeholder="Last Name" class="centered">
+                            <input type="email" name="email" [(ngModel)]="model.email" placeholder="Email"
+                                   class="centered" required>
                         </div>
-                    </div>
-                    <div class="field">
-                        <input type="email" name="email" placeholder="Email" class="centered">
-                    </div>
-                    <div class="field">
-                        <input type="password" name="password" placeholder="Password" class="centered">
-                    </div>
-                    <div class="field">
-                        <input type="password" name="passwordConfirm" placeholder="Confirm Password" class="centered">
-                    </div>
-                    <button class="ui green fluid button" type="submit">Create Account</button>
+                        <div class="field">
+                            <input type="password" name="password" [(ngModel)]="model.password"
+                                   placeholder="Password" class="centered" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" name="passwordConfirm" [(ngModel)]="model.password_confirm"
+                                   placeholder="Confirm Password" class="centered" required>
+                        </div>
+                        <button class="ui green fluid button" type="submit">Create Account</button>
 
-                    <div class="pad-top-2 centered link">
-                        <i class="arrow left big yellow circle icon"></i>
-                        <a routerLink="/login" class="link">Back</a>
-                    </div>
+                        <div class="pad-top-2 centered link">
+                            <i class="arrow left big yellow circle icon"></i>
+                            <a routerLink="/login" class="link">Back</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
