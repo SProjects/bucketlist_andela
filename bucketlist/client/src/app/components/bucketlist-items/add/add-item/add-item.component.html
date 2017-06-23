@@ -1,0 +1,37 @@
+<div class="ui main container">
+    <div class="column">
+        <div class="ui grid">
+
+            <div class="row">
+                <div class="six wide column">
+                    <span *ngIf="bucketlist" class="ui header">
+                        {{ bucketlist.name }}: New Item
+                    </span>
+                </div>
+                <div class="right aligned ten wide column">
+                    <a *ngIf="bucketlist" routerLink="/bucketlists/{{ bucketlist.id }}/items" class="ui tiny violet button">
+                        <i class="caret left icon"></i>
+                        Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="row">
+                <div class="column">
+                    <div *ngIf="!!message" class="ui error message">
+                        {{ message }}
+                    </div>
+                    <form class="ui four wide column form" (ngSubmit)="createItem()">
+                        <div class="field">
+                            <input type="text" name="name" [(ngModel)]="model.name"
+                                   placeholder="Item Name" required>
+                        </div>
+                        <button class="ui violet right align button" type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
