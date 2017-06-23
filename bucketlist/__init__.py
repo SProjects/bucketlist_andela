@@ -24,9 +24,10 @@ def create_app(env_name):
     from api.v1.auth import auth as auth_v1_blueprint
     api_v1 = Api(auth_v1_blueprint)
     app.register_blueprint(auth_v1_blueprint, url_prefix='/api/v1')
-    from api.v1.auth.views import RegisterUser, AuthenticateUser
+    from api.v1.auth.views import RegisterUser, AuthenticateUser, ValidateToken
     api_v1.add_resource(RegisterUser, '/auth/register', endpoint='register_endpoint')
     api_v1.add_resource(AuthenticateUser, '/auth/login', endpoint='login_endpoint')
+    api_v1.add_resource(ValidateToken, '/validate', endpoint='token_endpoint')
 
     from api.v1.users import users as users_v1_blueprint
     api_v1 = Api(users_v1_blueprint)

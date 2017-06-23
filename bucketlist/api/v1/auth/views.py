@@ -1,9 +1,10 @@
 from flask import g
 from flask import request
 from flask_restful import abort, Resource
+from itsdangerous import SignatureExpired, BadSignature
 
 from bucketlist.models.user import User
-from bucketlist.utils.utilities import validate
+from bucketlist.utils.utilities import validate, verify_token
 
 
 class RegisterUser(Resource):
@@ -38,5 +39,21 @@ class AuthenticateUser(Resource):
         if validate(email, password):
             return {'token': g.user.generate_token()}, 200
         return abort(401, message='Wrong email or password combination. Try again.')
+
+
+class ValidateToken(Resource):
+    def post(self):
+        arguments = request.get_json(force=True)
+        user_token = arguments.get('token') or None
+
+        try:
+            verify_token(user_token)
+            return {'message': 'true'}, 200
+        except (SignatureExpired, BadSignature):
+            return {'message': 'false'}, 200
+
+
+
+
 
 
