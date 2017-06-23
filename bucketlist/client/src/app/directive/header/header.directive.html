@@ -1,0 +1,19 @@
+<div class="ui fixed inverted menu" *ngIf="activeUser()">
+    <div class="ui container">
+        <a routerLink="/bucketlists" class="header item">
+            <img src="../../../../../static/images/logo.png" alt="Bucketlist" class="logo">
+            {{ title }}
+        </a>
+
+        <div class="right menu">
+            <div class="ui simple dropdown item" *ngIf="currentUser">
+                {{ currentUser.first_name }}
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a routerLink="/users/edit-user" class="item">Account settings</a>
+                    <a (click)="logout()" class="item">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
