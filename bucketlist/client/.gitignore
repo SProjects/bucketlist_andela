@@ -42,3 +42,4 @@ Thumbs.db
 
 # Bundled JS files
 static/build
+static/bower_components
