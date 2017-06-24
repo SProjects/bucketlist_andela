@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
 function build {
-    cd bucketlist/client
+    cd bucketlist/client/
     ng build
+    cd -
+}
+
+function install {
+    pip install -r requirements.txt
+    cd bucketlist/client/
+    npm install
+    bower install
     cd -
 }
 
@@ -19,9 +27,14 @@ function bt_cov {
 }
 
 function ct {
-    cd bucketlist/client
+    cd bucketlist/client/
     ng test
     cd -
+}
+
+function init {
+    install
+    build
 }
 
 # call arguments verbatim:
