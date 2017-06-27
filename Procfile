@@ -1,1 +1,1 @@
-web: gunicorn manage:app
+web: honcho -f ProcfileHoncho start
