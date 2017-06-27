@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { BucketlistService } from "../../../services/bucketlist.service";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { Bucketlist } from "../../../models/bucketlist.model";
 import { isUndefined } from "util";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-bucketlists',
@@ -23,8 +24,12 @@ export class BucketlistsComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private bucketlistService: BucketlistService
-  ) { }
+    private bucketlistService: BucketlistService,
+    public toast: ToastsManager,
+    viewContainerRef: ViewContainerRef
+  ) {
+    this.toast.setRootViewContainerRef(viewContainerRef);
+  }
 
   ngOnInit(): void{
     this.loadBucketlists();
@@ -66,8 +71,9 @@ export class BucketlistsComponent implements OnInit {
 
   deleteBucketlist(bucketlist: Bucketlist) {
     this.bucketlistService.destroy(bucketlist.id).subscribe(
-      success => {
-        this.ngOnInit();
+      successMessage => {
+        this.toast.success(successMessage);
+        this.loadBucketlists();
       },
       error => {
         console.error(error)
@@ -145,5 +151,9 @@ export class BucketlistsComponent implements OnInit {
           this.nextUrl = response['next'];
           this.hasNext = false;
         }
+  }
+
+  showSuccess(){
+    this.toast.success("This is success!");
   }
 }

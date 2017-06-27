@@ -26,6 +26,8 @@ import { AddItemComponent } from './components/bucketlist-items/add/add-item/add
 import { EditUserComponent } from './components/user/edit/edit-user/edit-user.component';
 import { CanAccessRouteGuard } from "./guards/can-access-route.guard";
 import { CanAccessLoginGuard } from "./guards/can-access-login.guard";
+import { ToastModule } from "ng2-toastr/ng2-toastr";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { CanAccessLoginGuard } from "./guards/can-access-login.guard";
     AppRoutingModule,
     HttpModule,
     FormsModule,
-    MomentModule
+    MomentModule,
+    BrowserAnimationsModule,
+    ToastModule.forRoot()
   ],
   providers: [
     AuthenticationService,

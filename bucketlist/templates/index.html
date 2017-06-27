@@ -5,6 +5,7 @@
     <title>Bucketlist - Andela</title>
     <link rel="stylesheet" type="text/css"
           href="{{ url_for("static", filename="bower_components/semantic/dist/semantic.min.css") }}">
+    <link href="../client/node_modules/ng2-toastr/bundles/ng2-toastr.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/app.css") }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for("static", filename="build/favicon.ico") }}">
     <base href="/">
@@ -15,6 +16,7 @@
                 src="{{ url_for("static", filename="bower_components/jquery/dist/jquery.min.js") }}"></script>
         <script type="text/javascript"
                 src="{{ url_for("static", filename="bower_components/semantic/dist/semantic.min.js") }}"></script>
+        <script type="text/javascript" src="../client/node_modules/ng2-toastr/bundles/ng2-toastr.min.js"></script>
         <script type="text/javascript" src="{{ url_for("static", filename="build/inline.bundle.js") }}"></script>
         <script type="text/javascript" src="{{ url_for("static", filename="build/polyfills.bundle.js") }}"></script>
         <script type="text/javascript" src="{{ url_for("static", filename="build/styles.bundle.js") }}"></script>
