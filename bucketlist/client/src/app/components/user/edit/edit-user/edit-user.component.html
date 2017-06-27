@@ -1,0 +1,71 @@
+<div class="ui main container">
+    <div class="column">
+        <div class="ui grid">
+
+            <div class="row">
+                <div class="six wide column">
+                    <span class="ui header">
+                        Edit user
+                    </span>
+                </div>
+                <div class="right aligned ten wide column">
+                    <a routerLink="/bucketlists" class="ui tiny violet button">
+                        <i class="caret left icon"></i>
+                        Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="row">
+                <div class="sixteen wide column">
+                    <div *ngIf="!!message" class="ui message" [class.error]="errorMessage"
+                         [class.positive]="successMessage">
+                        <i class="close icon"></i>
+                        {{ message }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <form *ngIf="user" class="ui eight wide column form segment" (ngSubmit)="updateUser()">
+                        <div class="two fields">
+                            <div class="field">
+                                <input type="text" name="firstName" [(ngModel)]="user.first_name"
+                                       placeholder="First Name" class="centered" required>
+                            </div>
+                            <div class="field">
+                                <input type="text" name="lastName" [(ngModel)]="user.last_name"
+                                       placeholder="Last Name" class="centered" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <input type="email" name="email" [(ngModel)]="user.email" placeholder="Email"
+                                   class="centered" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" name="password" [(ngModel)]="user.password"
+                                   placeholder="Password" class="centered" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" name="passwordConfirm" [(ngModel)]="user.password_confirm"
+                                   placeholder="Confirm Password" class="centered" required>
+                        </div>
+                        <button class="ui violet button right aligned" type="submit">Edit Account</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+      $('.message .close').on('click', function() {
+        $(this).closest('.message').transition('fade');
+      });
+    });
+</script>

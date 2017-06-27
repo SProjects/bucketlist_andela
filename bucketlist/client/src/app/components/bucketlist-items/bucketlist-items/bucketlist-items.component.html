@@ -1,0 +1,61 @@
+<div class="ui main container">
+    <div class="column">
+        <div class="ui grid">
+
+            <div class="row">
+                <div class="six wide column">
+                    <span class="ui header" *ngIf="bucketlist">
+                        {{ bucketlist.name }}
+                    </span>
+                </div>
+                <div class="right aligned ten wide column">
+                    <a routerLink="/bucketlists" class="ui tiny violet button">
+                        <i class="caret left icon"></i>
+                        Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="row">
+                <div class="sixteen wide column">
+                    <a *ngIf="bucketlist" routerLink="/bucketlists/{{ bucketlist.id }}/add-item" class="ui tiny violet circular button">
+                        <i class="plus icon"></i>
+                        Add
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="sixteen wide column" *ngIf="items && items.length == 0">
+                    <div class="ui basic message">
+                        No items to display.
+                    </div>
+                </div>
+
+                <div class="ui three column grid" *ngIf="items">
+                    <div class="column" *ngFor="let item of items">
+                        <div class="ui fluid card" [class.grey]="item.done == true"
+                             [class.violet]="item.done == false">
+                            <div class="content">
+                                <i class="right floated trash black icon" (click)="delete(item)"></i>
+                                <i class="right floated edit black icon" *ngIf="item.done == false"
+                                   (click)="updateItem(item)"></i>
+                                <i class="right floated check green icon" *ngIf="item.done == false"
+                                   (click)="markAsDone(item)"></i>
+                                <i class="right floated check grey icon" *ngIf="item.done == true"></i>
+                                <div class="header">{{ item.name }}</div>
+                                <div class="description">
+                                    Created {{ item.date_created | amTimeAgo }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

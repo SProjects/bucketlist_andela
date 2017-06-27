@@ -1,4 +1,5 @@
 from flask import g
+from flask import request
 from flask_restful import Resource, fields, marshal_with, marshal, abort, reqparse
 from sqlalchemy import desc
 
@@ -19,6 +20,15 @@ class UserEndpoint(Resource):
     @marshal_with(user_fields)
     @auth.login_required
     def get(self, user_id):
+        parser = reqparse.RequestParser()
+        parser.add_argument('token', type=bool)
+        arguments = parser.parse_args()
+
+        use_token = arguments.get('token') or None
+
+        if use_token:
+            return g.user
+
         user = User.query.get(user_id)
         if user:
             return user
@@ -28,15 +38,8 @@ class UserEndpoint(Resource):
     @auth.login_required
     @marshal_with(user_fields)
     def put(self, user_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('first_name', type=str)
-        parser.add_argument('last_name', type=str)
-        parser.add_argument('email', type=str)
-        parser.add_argument('old_password', type=str)
-        parser.add_argument('new_password', type=str)
-        parser.add_argument('new_password_confirm', type=str)
+        arguments = request.get_json(force=True)
 
-        arguments = parser.parse_args()
         first_name, last_name = arguments.get('first_name') or None, arguments.get('last_name') or None
         email = arguments.get('email') or None
         old_password, new_password = arguments.get('old_password') or None, arguments.get('new_password') or None

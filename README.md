@@ -22,13 +22,29 @@ Bucketlist is an API powered application that helps its users to create bucketli
 
 ## Setup
 
+#### Automated
+1. Create a virtual environment and activate it. 
+2. Clone the project from `https://github.com/SProjects/bucketlist_andela.git`
+3. `cd` into the project root
+4. Create database. Run `createdb bucketlist_dev` in the terminal
+5. Migrate the database using `python manage.py db upgrade`
+6. Run `source go.sh`
+7. Run `init`
+8. After a successful build, run `serve`
+
+#### Manual
 1. Create a virtual environment and activate it. 
 2. Clone the project from `https://github.com/SProjects/bucketlist_andela.git`
 3. `cd` into the project root
 4. Run `pip install requirements.txt` to install all project dependencies to the virtual environment.
 5. Create database. Run `createdb bucketlist_dev` in the terminal
 6. Migrate the database using `python manage.py db upgrade`
-7. Start the application with; `python manage.py runserver`
+7. `cd` into the client directory `cd bucketlist/client/`
+8. Install bower components `bower install`
+9. Install npm requirements `npm install`
+10. Build the project `ng build`
+11. `cd` back to the root directory
+12. Start the application with; `python manage.py runserver`
 
 ## Usage
 

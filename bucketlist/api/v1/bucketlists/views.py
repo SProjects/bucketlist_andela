@@ -1,4 +1,5 @@
 from flask import g
+from flask import request
 from flask import url_for
 from flask_restful import Resource, reqparse, abort, marshal, fields, marshal_with
 from sqlalchemy import desc
@@ -33,27 +34,28 @@ class BucketListEndpoint(Resource):
     @auth.login_required
     @marshal_with(bucketlist_fields)
     def put(self, bucketlist_id):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, help='Bucketlist name is required', required=True)
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
         name = arguments.get('name')
 
-        bucketlist = Bucketlist.query.get(bucketlist_id)
+        current_user = g.user
+        bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=current_user).first()
         if bucketlist:
             bucketlist.name = name
             bucketlist.save()
             return bucketlist, 200
         else:
-            abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            abort(400, message='Bucketlist with ID#{} not found or not yours.'.format(bucketlist_id))
 
+    @auth.login_required
     def delete(self, bucketlist_id):
-        bucketlist = Bucketlist.query.get(bucketlist_id)
+        current_user = g.user
+        bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=current_user).first()
         if bucketlist:
             bucketlist.delete()
             response = {'message': 'Bucketlist with ID#{} successfully deleted.'.format(bucketlist_id)}
             return response, 200
         else:
-            abort(400, message='Bucketlist with ID#{} not found.'.format(bucketlist_id))
+            abort(400, message='Bucketlist with ID#{} not found or not yours.'.format(bucketlist_id))
 
 
 class BucketLists(Resource):
@@ -72,7 +74,7 @@ class BucketLists(Resource):
         current_user = g.user
         if search_term is not None:
             bucketlists = Bucketlist.query.\
-                filter(Bucketlist.name.like('%' + search_term + '%'),
+                filter(Bucketlist.name.ilike('%' + search_term + '%'),
                        Bucketlist.user == current_user).order_by(desc(Bucketlist.created_at)).all()
             return dict(results=marshal(bucketlists, bucketlist_fields)), 200
 
@@ -88,9 +90,7 @@ class BucketLists(Resource):
 
     @auth.login_required
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, help='Bucketlist name is required', required=True)
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
         name = arguments.get('name')
 
         current_user = g.user

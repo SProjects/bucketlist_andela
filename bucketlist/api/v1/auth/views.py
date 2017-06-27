@@ -1,20 +1,15 @@
 from flask import g
-from flask_restful import reqparse, abort, Resource
+from flask import request
+from flask_restful import abort, Resource
+from itsdangerous import SignatureExpired, BadSignature
 
 from bucketlist.models.user import User
-from bucketlist.utils.utilities import validate
+from bucketlist.utils.utilities import validate, verify_token
 
 
 class RegisterUser(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('first_name', type=str, help='First name is required', required=True)
-        parser.add_argument('last_name', type=str, help='Last name is required', required=True)
-        parser.add_argument('email', type=str, help='Email is required', required=True)
-        parser.add_argument('password', type=str, help='Password is required', required=True)
-        parser.add_argument('password_confirm', type=str, help='Password confirmation is required', required=True)
-
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
 
         first_name, last_name = arguments.get('first_name'), arguments.get('last_name')
         email, password = arguments.get('email'), arguments.get('password')
@@ -31,22 +26,34 @@ class RegisterUser(Resource):
                 return response, 201
             else:
                 response = {'message': 'User already exists. Login.'}
-                return response, 202
+                return response, 409
         except Exception as e:
             abort(401, message='Error while creating your account: {}'.format(e.message))
 
 
 class AuthenticateUser(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument('email', type=str, help='Email is required', required=True)
-        parser.add_argument('password', type=str, help='Password is required', required=True)
-
-        arguments = parser.parse_args()
+        arguments = request.get_json(force=True)
         email, password = arguments.get('email'), arguments.get('password')
 
         if validate(email, password):
             return {'token': g.user.generate_token()}, 200
         return abort(401, message='Wrong email or password combination. Try again.')
+
+
+class ValidateToken(Resource):
+    def post(self):
+        arguments = request.get_json(force=True)
+        user_token = arguments.get('token') or None
+
+        try:
+            verify_token(user_token)
+            return {'message': 'true'}, 200
+        except (SignatureExpired, BadSignature):
+            return {'message': 'false'}, 200
+
+
+
+
 
 

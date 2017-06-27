@@ -1,0 +1,36 @@
+<div class="ui stackable grid padded full-height">
+    <div class="sixteen wide center aligned row">
+        <div class="sixteen wide middle aligned column">
+            <div class="ui centered padded grid">
+                <div class="four wide column">
+                    <div *ngIf="!!message" class="ui error message">
+                        {{ message }}
+                    </div>
+                    <form class="ui four wide column form segment" (ngSubmit)="login()">
+                        <div class="field">
+                            <div class="field centered">
+                                <img src="../../../../static/images/logo.png" alt="Bucketlist"
+                                     class="ui middle aligned tiny image logo-name">
+                                <span class="logo-name">Bucketlist</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <input type="email" name="email" [(ngModel)]="payload.email" placeholder="Email"
+                                   class="centered" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" name="password" [(ngModel)]="payload.password"
+                                   placeholder="Password" class="centered" required>
+                        </div>
+                        <button class="ui green fluid button" type="submit">Sign in</button>
+
+                        <div class="pad-top-2 centered link">
+                            <i class="add big yellow circle icon"></i>
+                            <a routerLink="/register" class="link">Sign up for an account!</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
