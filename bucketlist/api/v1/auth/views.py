@@ -3,6 +3,7 @@ from flask import request
 from flask_restful import abort, Resource
 from itsdangerous import SignatureExpired, BadSignature
 
+from bucketlist import auth
 from bucketlist.models.user import User
 from bucketlist.utils.utilities import validate, verify_token
 
@@ -51,6 +52,14 @@ class ValidateToken(Resource):
             return {'message': 'true'}, 200
         except (SignatureExpired, BadSignature):
             return {'message': 'false'}, 200
+
+
+class Logout(Resource):
+    @auth.login_required
+    def get(self):
+        g.user = None
+        return {'message': 'ok'}, 200
+
 
 
 

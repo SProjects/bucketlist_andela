@@ -6,6 +6,7 @@ import 'rxjs/add/operator/catch';
 
 import { Auth } from "../models/auth.model";
 import { AppConfig } from "../app.config";
+import { Utilities } from "../utilities/utilities";
 
 @Injectable()
 export class AuthenticationService {
@@ -14,7 +15,8 @@ export class AuthenticationService {
 
   constructor(
     private http: Http,
-    private config: AppConfig
+    private config: AppConfig,
+    private util: Utilities
   ) { }
 
   login(email: string, password: string) {
@@ -71,5 +73,13 @@ export class AuthenticationService {
 
   isLoggedIn() {
     return !!localStorage.getItem('currentUser') && this.isTokenValid;
+  }
+
+  logout() {
+    let headers = this.util.getAuthHeaders();
+
+    return this.http.get(this.config.apiV1Url + 'logout', {headers: headers})
+      .map(response => { return response.json().message })
+      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 }

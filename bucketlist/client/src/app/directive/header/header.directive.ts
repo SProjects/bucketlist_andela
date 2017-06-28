@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import { Router } from "@angular/router";
+import { ToastsManager } from "ng2-toastr";
+
 import { User } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
-import {Router} from "@angular/router";
-import {AuthenticationService} from "../../services/authentication.service";
+import { AuthenticationService } from "../../services/authentication.service";
 
 @Component({
   selector: 'app-header',
@@ -15,8 +17,12 @@ export class HeaderDirective implements OnInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private authService: AuthenticationService
-  ) {}
+    private authService: AuthenticationService,
+    public toast: ToastsManager,
+    viewContainerRef: ViewContainerRef
+  ) {
+    this.toast.setRootViewContainerRef(viewContainerRef);
+  }
 
   ngOnInit() {
     this.getUser();
@@ -37,7 +43,16 @@ export class HeaderDirective implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
-    this.router.navigate(['/login']);
+    this.authService.logout().subscribe(
+      successMessage => {
+        localStorage.clear();
+        this.toast.success(successMessage);
+        this.router.navigate(['/login']);
+      },
+      error => {
+        this.toast.error(error.message);
+      }
+    );
+
   }
 }
