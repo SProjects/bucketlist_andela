@@ -2,7 +2,7 @@
 
 function build {
     cd bucketlist/client/
-    ng build
+    npm run build
     cd -
 }
 
