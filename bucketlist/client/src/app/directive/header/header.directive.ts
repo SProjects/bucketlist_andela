@@ -47,7 +47,7 @@ export class HeaderDirective implements OnInit {
       successMessage => {
         localStorage.clear();
         this.toast.success(successMessage);
-        this.router.navigate(['/login']);
+        window.location.reload();
       },
       error => {
         this.toast.error(error.message);
