@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { AuthenticationService } from "../../services/authentication.service";
-import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-login-form',
@@ -15,17 +14,15 @@ export class LoginFormComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
-    private userService: UserService
+    private authenticationService: AuthenticationService
   ) {}
 
   ngOnInit(){
   }
 
   login (){
-    this.authenticationService.login(this.payload.email, this.payload.password).subscribe(
-      data => {
-        this.userService.getCurrentUser();
+    this.authenticationService.login(this.payload.email, this.payload.password)
+      .subscribe(() => {
         this.router.navigate(['/bucketlists']);
       },
       error => {

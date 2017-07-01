@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { Bucketlist } from "../../../models/bucketlist.model";
 import { isUndefined } from "util";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-bucketlists',
@@ -26,13 +27,15 @@ export class BucketlistsComponent implements OnInit {
     private route: ActivatedRoute,
     private bucketlistService: BucketlistService,
     public toast: ToastsManager,
-    viewContainerRef: ViewContainerRef
+    viewContainerRef: ViewContainerRef,
+    private userService: UserService
   ) {
     this.toast.setRootViewContainerRef(viewContainerRef);
   }
 
   ngOnInit(): void{
     this.loadBucketlists();
+    this.userService.getCurrentUser().subscribe();
   }
 
   search(searchTerm) {

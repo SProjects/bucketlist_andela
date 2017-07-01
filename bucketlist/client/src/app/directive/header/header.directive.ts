@@ -1,8 +1,6 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
-import { Router } from "@angular/router";
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ToastsManager } from "ng2-toastr";
 
-import { User } from "../../models/user.model";
 import { UserService } from "../../services/user.service";
 import { AuthenticationService } from "../../services/authentication.service";
 
@@ -12,10 +10,10 @@ import { AuthenticationService } from "../../services/authentication.service";
 })
 export class HeaderDirective implements OnInit {
   title = 'BUCKETLIST';
-  currentUser: User = null;
+
+  public currentUser = null;
 
   constructor(
-    private router: Router,
     private userService: UserService,
     private authService: AuthenticationService,
     public toast: ToastsManager,
@@ -25,18 +23,11 @@ export class HeaderDirective implements OnInit {
   }
 
   ngOnInit() {
-    this.getUser();
+    this.userService.hasUser.subscribe(user => {
+      this.currentUser = user;
+    })
   }
 
-  private getUser() {
-    if (this.activeUser()) {
-      this.userService.getCurrentUser().subscribe(
-        user => {
-          this.currentUser = user
-        }
-      );
-    }
-  }
 
   activeUser() {
     return this.authService.isLoggedIn();

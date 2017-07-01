@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
-import { Observable } from "rxjs/Observable";
+import { Observable, ReplaySubject } from "rxjs/Rx";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
@@ -12,20 +12,22 @@ import { Utilities } from "../utilities/utilities";
 export class UserService {
   headers: any = null;
   public currentUser: any;
+  public hasUser: ReplaySubject<any> = new ReplaySubject<any>();
 
   constructor(
     private http: Http,
     private config: AppConfig,
     private util: Utilities
   ) {
-    this.headers = util.getAuthHeaders();
   }
 
   getCurrentUser(): Observable<User> {
+    this.headers = this.util.getAuthHeaders();
     return this.http.get(this.config.apiV1Url + 'users/1?token=true', {headers: this.headers})
       .map(response => {
-        this.currentUser = response.json() as User;
-        return response.json() as User;
+        let user = response.json() as User;
+        this.hasUser.next(user);
+        return user;
       }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
   }
 
