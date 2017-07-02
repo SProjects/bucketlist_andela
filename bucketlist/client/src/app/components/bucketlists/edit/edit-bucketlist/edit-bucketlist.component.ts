@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BucketlistService } from "../../../../services/bucketlist.service";
 import { Bucketlist } from "../../../../models/bucketlist.model";
 import { ActivatedRoute, Router } from "@angular/router";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-edit-bucketlist',
@@ -11,13 +12,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class EditBucketlistComponent implements OnInit{
   id: number = null;
   bucketlist: Bucketlist = null;
-  message: string = null;
   payload: any = {};
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private bucketlistService: BucketlistService
+    private bucketlistService: BucketlistService,
+    public toast: ToastsManager
   ) { }
 
   ngOnInit() {
@@ -27,12 +28,12 @@ export class EditBucketlistComponent implements OnInit{
 
   updateBucketlist () {
     this.bucketlistService.edit(this.bucketlist.id, this.bucketlist.name).subscribe(
-      data => {
-        this.message = data;
+      () => {
+        this.toast.success("Bucketlist with ID#" + this.bucketlist.id + " updated successfully");
         this.router.navigate(['/bucketlists']);
       },
-      error => {
-        this.message = error;
+      errorMessage => {
+        this.toast.error(errorMessage);
       }
     );
   }
@@ -42,8 +43,8 @@ export class EditBucketlistComponent implements OnInit{
       bucketlist => {
         this.bucketlist = bucketlist;
       },
-      error => {
-        console.error(JSON.stringify(error));
+      errorMessage => {
+        this.toast.error(errorMessage);
       }
     )
   }

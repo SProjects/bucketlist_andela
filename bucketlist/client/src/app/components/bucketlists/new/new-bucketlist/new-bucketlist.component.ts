@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { BucketlistService } from "../../../../services/bucketlist.service";
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-new-bucketlist',
@@ -14,7 +15,8 @@ export class NewBucketlistComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private bucketlistService: BucketlistService
+    private bucketlistService: BucketlistService,
+    public toast: ToastsManager
   ) { }
 
   ngOnInit() {
@@ -22,12 +24,12 @@ export class NewBucketlistComponent implements OnInit {
 
   createBucketlist () {
     this.bucketlistService.create(this.payload.name).subscribe(
-      data => {
-        this.message = data;
-        this.router.navigate(['/bucketlists'], { queryParams: {limit: 5} });
+      successMessage => {
+        this.toast.success(successMessage);
+        this.router.navigate(['/bucketlists']);
       },
-      error => {
-        this.message = error;
+      errorMessage => {
+        this.toast.error(errorMessage);
       }
     );
   }
