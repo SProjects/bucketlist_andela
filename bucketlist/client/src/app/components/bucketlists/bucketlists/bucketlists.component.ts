@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BucketlistService } from "../../../services/bucketlist.service";
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { Bucketlist } from "../../../models/bucketlist.model";
 import { isUndefined } from "util";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
-import {UserService} from "../../../services/user.service";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: 'app-bucketlists',
@@ -13,7 +13,6 @@ import {UserService} from "../../../services/user.service";
   styleUrls: ['./bucketlists.component.css']
 })
 export class BucketlistsComponent implements OnInit {
-  message: string = null;
   bucketlists: any = [];
   limit: number = 4;
   searchTerm: string = '';
@@ -26,12 +25,9 @@ export class BucketlistsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private bucketlistService: BucketlistService,
-    public toast: ToastsManager,
-    viewContainerRef: ViewContainerRef,
-    private userService: UserService
-  ) {
-    this.toast.setRootViewContainerRef(viewContainerRef);
-  }
+    private userService: UserService,
+    public toast: ToastsManager
+  ) {}
 
   ngOnInit(): void{
     this.loadBucketlists();
@@ -48,7 +44,7 @@ export class BucketlistsComponent implements OnInit {
           this.processResponse(response);
         },
         error => {
-          console.error(JSON.stringify(error));
+          this.toast.error(JSON.stringify(error));
         }
       );
     }
@@ -66,7 +62,7 @@ export class BucketlistsComponent implements OnInit {
             this.processResponse(response);
           },
           error => {
-            console.error(JSON.stringify(error));
+            this.toast.error(JSON.stringify(error));
           }
         )
     })
@@ -79,7 +75,7 @@ export class BucketlistsComponent implements OnInit {
         this.loadBucketlists();
       },
       error => {
-        console.error(error)
+        this.toast.error(JSON.stringify(error));
       }
     );
   }
@@ -90,7 +86,7 @@ export class BucketlistsComponent implements OnInit {
         this.processResponse(response);
       },
       error => {
-        console.error(JSON.stringify(error));
+        this.toast.error(JSON.stringify(error));
       }
     );
   }
@@ -101,7 +97,7 @@ export class BucketlistsComponent implements OnInit {
         this.processResponse(response);
       },
       error => {
-        console.error(JSON.stringify(error));
+        this.toast.error(JSON.stringify(error));
       }
     );
   }
@@ -154,9 +150,5 @@ export class BucketlistsComponent implements OnInit {
           this.nextUrl = response['next'];
           this.hasNext = false;
         }
-  }
-
-  showSuccess(){
-    this.toast.success("This is success!");
   }
 }

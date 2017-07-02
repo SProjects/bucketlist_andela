@@ -23,14 +23,6 @@
             <div class="ui divider"></div>
 
             <div class="row">
-                <div class="sixteen wide column">
-                    <div *ngIf="!!message" class="ui error message">
-                        {{ message }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="twelve wide column">
                     <a routerLink="/new-bucketlist" class="ui tiny violet circular button">
                         <i class="plus icon"></i>
@@ -63,9 +55,6 @@
                                     </a>
                                     <a (click)="deleteBucketlist(bucketlist)" class="basic link" title="Delete">
                                         <i class="trash black icon"></i>
-                                    </a>
-                                    <a (click)="showSuccess()" class="basic link" title="Toast">
-                                        <i class="star black icon"></i>
                                     </a>
                                 </div>
                             </div>
