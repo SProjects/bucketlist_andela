@@ -2,8 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms'
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-import {MomentModule} from "angular2-moment";
+import { MomentModule } from "angular2-moment";
+import { ToastModule, ToastOptions } from "ng2-toastr/ng2-toastr";
+import { CustomOption } from './app.toast-cofig';
 
 import { AppComponent } from './app.component';
 import { LoginFormComponent } from './components/login-form/login-form.component';
@@ -26,8 +29,6 @@ import { AddItemComponent } from './components/bucketlist-items/add/add-item/add
 import { EditUserComponent } from './components/user/edit/edit-user/edit-user.component';
 import { CanAccessRouteGuard } from "./guards/can-access-route.guard";
 import { CanAccessLoginGuard } from "./guards/can-access-login.guard";
-import { ToastModule } from "ng2-toastr/ng2-toastr";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     Utilities,
     CanAccessRouteGuard,
     CanAccessLoginGuard,
-    AppConfig
+    AppConfig,
+    {provide: ToastOptions, useClass: CustomOption}
   ],
   bootstrap: [AppComponent]
 })
