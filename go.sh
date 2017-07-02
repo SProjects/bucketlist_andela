@@ -6,6 +6,12 @@ function build {
     cd -
 }
 
+function build_prod {
+    cd bucketlist/client/
+    npm run build_prod
+    cd -
+}
+
 function install {
     pip install -r requirements.txt
     cd bucketlist/client/
@@ -35,6 +41,11 @@ function ct {
 function init {
     install
     build
+}
+
+function init_prod {
+    install
+    build_prod
 }
 
 # call arguments verbatim:
