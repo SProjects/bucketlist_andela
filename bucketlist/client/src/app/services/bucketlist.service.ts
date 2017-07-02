@@ -6,7 +6,7 @@ import 'rxjs/add/operator/catch';
 
 import { AppConfig } from "../app.config";
 import { Bucketlist } from "../models/bucketlist.model";
-import {Utilities} from "../utilities/utilities";
+import { Utilities } from "../utilities/utilities";
 
 @Injectable()
 export class BucketlistService {
@@ -32,7 +32,7 @@ export class BucketlistService {
     return this.http.get(bucketlistUrl, {headers: this.headers})
       .map(response => {
         return this.processResponse(response);
-      }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      }).catch(this.handleError);
   }
 
   navigate(navUrl) {
@@ -40,19 +40,19 @@ export class BucketlistService {
       response => {
         return this.processResponse(response);
       }
-    ).catch((error:any) => Observable.throw(error.json().error || 'Server error'))
+    ).catch(this.handleError)
   }
 
   getBucketlist(id: number): Observable<Bucketlist> {
     return this.http.get(this.bucketlistUrl  + '/' +  id, {headers: this.headers})
       .map(response => response.json() as Bucketlist)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   destroy(id: number) {
     return this.http.delete(this.bucketlistUrl + '/' + id, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   create(name: string) {
@@ -61,7 +61,7 @@ export class BucketlistService {
     };
     return this.http.post(this.bucketlistUrl, payload, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   edit(id: number, name: string) {
@@ -70,7 +70,7 @@ export class BucketlistService {
     };
     return this.http.put(this.bucketlistUrl +  '/' + id, payload, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   private processResponse(response) {
@@ -78,5 +78,9 @@ export class BucketlistService {
     this.next = response.json().next;
     this.previous = response.json().prev;
     return {"bucketlists": bucketlists, "next": this.next, "previous": this.previous};
+  }
+
+  private handleError(error: Response) {
+    return Observable.throw(error.json()['message'] || 'Server error')
   }
 }
