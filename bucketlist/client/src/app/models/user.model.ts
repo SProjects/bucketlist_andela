@@ -6,4 +6,5 @@ export interface User {
   bucketlistsUrl: string;
   password: string;
   password_confirm: string;
+  old_password: string;
 }

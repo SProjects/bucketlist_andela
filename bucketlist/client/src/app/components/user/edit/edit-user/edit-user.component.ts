@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../../../services/user.service";
 import { User } from "../../../../models/user.model";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-edit-user',
@@ -9,12 +10,12 @@ import { User } from "../../../../models/user.model";
 })
 export class EditUserComponent implements OnInit {
   user: User = null;
-  message: string = null;
   successMessage: boolean = false;
   errorMessage: boolean = false;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    public toast: ToastsManager
   ) { }
 
   ngOnInit() {
@@ -25,12 +26,12 @@ export class EditUserComponent implements OnInit {
     this.userService.edit(this.user).subscribe(
       user => {
         this.successMessage = true;
-        this.message = "User successfully updated.";
+        this.toast.success('User successfully updated.');
         this.user = user;
       },
       error => {
         this.errorMessage = true;
-        this.message = error.message;
+        this.toast.error(error);
       }
     );
   }
@@ -41,7 +42,7 @@ export class EditUserComponent implements OnInit {
         this.user = user;
       },
       error => {
-        this.message = error;
+        this.toast.error(error);
       }
     );
   }
