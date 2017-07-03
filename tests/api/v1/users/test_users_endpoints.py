@@ -119,7 +119,7 @@ class TestUsersEndpoint(BaseTestCase):
         self.assertFalse(updated_user.check_password(update_fields.get('password')))
         self.assertTrue(updated_user.check_password(update_fields.get('old_password')))
 
-    def test_password_update_fails_with_401_if_old_password_is_incorrect(self):
+    def test_password_update_fails_with_400_if_old_password_is_incorrect(self):
         self.add_user()
         update_fields = dict(old_password='wrong_old_password', password='new_password',
                              password_confirm='new_password')
@@ -134,7 +134,7 @@ class TestUsersEndpoint(BaseTestCase):
         self.assertFalse(updated_user.check_password(update_fields.get('password')))
         self.assertTrue(updated_user.check_password('test_password'))
 
-    def test_password_update_fails_with_401_if_new_password_fields_dont_match(self):
+    def test_password_update_fails_with_400_if_new_password_fields_dont_match(self):
         self.add_user()
         update_fields = dict(old_password='test_password', password='new_password',
                              password_confirm='none_matching_password')
