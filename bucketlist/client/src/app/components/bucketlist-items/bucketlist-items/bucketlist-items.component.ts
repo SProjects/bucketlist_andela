@@ -5,6 +5,7 @@ import { Item } from "../../../models/item.model";
 import { BucketlistService } from "../../../services/bucketlist.service";
 import { Bucketlist } from "../../../models/bucketlist.model";
 import { BucketlistItemService } from "../../../services/bucketlist-item.service";
+import { ToastsManager } from "ng2-toastr";
 
 @Component({
   selector: 'app-bucketlist-items',
@@ -21,9 +22,14 @@ export class BucketlistItemsComponent implements OnInit {
     private route: ActivatedRoute,
     private bucketlistService: BucketlistService,
     private itemService: BucketlistItemService,
+    public toast: ToastsManager
   ) { }
 
   ngOnInit() {
+    this.getItems();
+  }
+
+  private getItems() {
     let id = +this.route.snapshot.params['id'];
     this.bucketlistService.getBucketlist(id).subscribe(
       bucketlist => {
@@ -35,12 +41,12 @@ export class BucketlistItemsComponent implements OnInit {
 
   markAsDone(item: Item) {
     this.itemService.edit(this.bucketlist.id, item.id, {'done': true}).subscribe(
-      responseMessage => {
-        this.message = responseMessage;
-        this.ngOnInit();
+      () => {
+        this.toast.success('Hurray! Bucketlist item completed.');
+        this.getItems();
       },
       error => {
-        this.message = error;
+        this.toast.error(error);
       }
     );
   }
@@ -51,12 +57,12 @@ export class BucketlistItemsComponent implements OnInit {
 
   delete(item: Item) {
     this.itemService.delete(this.bucketlist.id, item.id).subscribe(
-      responseMessage => {
-        this.message = responseMessage;
-        this.ngOnInit();
+      successMessage => {
+        this.toast.success(successMessage);
+        this.getItems();
       },
       error => {
-        this.message = error;
+        this.toast.error(error);
       }
     );
   }

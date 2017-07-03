@@ -20,9 +20,6 @@
 
             <div class="row">
                 <div class="column">
-                    <div *ngIf="!!message" class="ui error message">
-                        {{ message }}
-                    </div>
                     <form *ngIf="item" class="ui four wide column form" (ngSubmit)="update()">
                         <div class="field">
                             <input type="text" name="name" [(ngModel)]="item.name"

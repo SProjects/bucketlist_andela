@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { BucketlistItemService } from "../../../../services/bucketlist-item.service";
 import { Bucketlist } from "../../../../models/bucketlist.model";
 import { BucketlistService } from "../../../../services/bucketlist.service";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-add-item',
@@ -13,13 +14,13 @@ export class AddItemComponent implements OnInit {
   bucketlist_id: number;
   bucketlist: Bucketlist = null;
   model: any = {};
-  message: string;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private bucketlistService: BucketlistService,
-    private itemService: BucketlistItemService
+    private itemService: BucketlistItemService,
+    public toast: ToastsManager
   ) { }
 
   ngOnInit() {
@@ -30,11 +31,11 @@ export class AddItemComponent implements OnInit {
   createItem() {
     this.itemService.create(this.bucketlist_id, {"name": this.model.name}).subscribe(
       successMessage => {
-        this.message = successMessage;
+        this.toast.success(successMessage);
         this.router.navigate(['/bucketlists/' + this.bucketlist_id + '/items']);
       },
       error => {
-        this.message = error;
+        this.toast.error(error);
       }
     );
   }
@@ -45,7 +46,7 @@ export class AddItemComponent implements OnInit {
         this.bucketlist = bucketlist;
       },
       error => {
-        this.message = error;
+        this.toast.error(error);
       }
     );
   }
