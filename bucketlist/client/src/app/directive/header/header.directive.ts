@@ -35,9 +35,9 @@ export class HeaderDirective implements OnInit {
 
   logout() {
     this.authService.logout().subscribe(
-      successMessage => {
+      () => {
         localStorage.clear();
-        this.toast.success(successMessage);
+        this.toast.success("Logging out...");
         window.location.reload();
       },
       error => {
