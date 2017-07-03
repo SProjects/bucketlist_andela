@@ -20,6 +20,7 @@ export class BucketlistsComponent implements OnInit {
   previousUrl: string;
   hasNext: boolean;
   nextUrl: string;
+  loading: boolean = true;
 
   constructor(
     private router: Router,
@@ -51,6 +52,7 @@ export class BucketlistsComponent implements OnInit {
   }
 
   private loadBucketlists() {
+    this.loading = true;
     this.route.queryParams.subscribe(
       params => {
         if (params['limit']) {
@@ -60,6 +62,7 @@ export class BucketlistsComponent implements OnInit {
         this.bucketlistService.getAll(this.limit, null).subscribe(
           response => {
             this.processResponse(response);
+            this.loading = false;
           },
           error => {
             this.toast.error(JSON.stringify(error));
