@@ -80,6 +80,10 @@ export class AuthenticationService {
 
     return this.http.get(this.config.apiV1Url + 'logout', {headers: headers})
       .map(response => { return response.json().message })
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
+  }
+
+  private handleError(error: Response) {
+    return Observable.throw(error.json()['message'] || 'Server error')
   }
 }

@@ -41,7 +41,7 @@ export class HeaderDirective implements OnInit {
         window.location.reload();
       },
       error => {
-        this.toast.error(error.message);
+        this.toast.error(error);
       }
     );
 
