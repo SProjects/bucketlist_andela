@@ -28,13 +28,13 @@ export class UserService {
         let user = response.json() as User;
         this.hasUser.next(user);
         return user;
-      }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      }).catch(this.handleError);
   }
 
   create(user: User) {
     return this.http.post(this.config.apiV1Url + 'auth/register', user, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   edit(user: User): Observable<User> {
@@ -42,6 +42,10 @@ export class UserService {
       .map(response => {
         return response.json()
       })
-      .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
+  }
+
+  private handleError(error: Response) {
+    return Observable.throw(error.json()['message'] || 'Server error')
   }
 }
