@@ -42,17 +42,20 @@ class UserEndpoint(Resource):
 
         first_name, last_name = arguments.get('first_name') or None, arguments.get('last_name') or None
         email = arguments.get('email') or None
-        old_password, new_password = arguments.get('old_password') or None, arguments.get('new_password') or None
-        new_password_confirm = arguments.get('new_password_confirm') or None
+        old_password, new_password = arguments.get('old_password') or None, arguments.get('password') or None
+        new_password_confirm = arguments.get('password_confirm') or None
 
         current_user = g.user
         if current_user.id == user_id:
             try:
                 if old_password is not None and new_password is not None and new_password_confirm is not None:
-                    if current_user.check_password(old_password) and (new_password == new_password_confirm):
+                    if not current_user.check_password(old_password):
+                        raise PasswordError('Incorrect old password.')
+
+                    if new_password == new_password_confirm:
                         current_user.password = new_password
                     else:
-                        raise PasswordError('Incorrect old password or new passwords don\'t match.')
+                        raise PasswordError('New passwords don\'t match.')
 
                 current_user.first_name = first_name if first_name is not None else current_user.first_name
                 current_user.last_name = last_name if last_name is not None else current_user.last_name

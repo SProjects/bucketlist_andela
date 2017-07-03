@@ -98,31 +98,31 @@ class TestUsersEndpoint(BaseTestCase):
 
     def test_user_can_update_password(self):
         self.add_user()
-        update_fields = dict(old_password='test_password', new_password='new_password',
-                             new_password_confirm='new_password')
+        update_fields = dict(old_password='test_password', password='new_password',
+                             password_confirm='new_password')
         response = self.client().put('/api/v1/users/1', data=json.dumps(update_fields),
                                      headers=self.authorization_headers())
         updated_user = User.query.get(1)
 
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(updated_user.check_password(update_fields.get('new_password')))
+        self.assertTrue(updated_user.check_password(update_fields.get('password')))
         self.assertFalse(updated_user.check_password(update_fields.get('old_password')))
 
     def test_password_update_does_not_occur_if_any_password_update_fields_is_missing(self):
         self.add_user()
-        update_fields = dict(old_password='test_password', new_password='new_password')
+        update_fields = dict(old_password='test_password', password='new_password')
         response = self.client().put('/api/v1/users/1', data=json.dumps(update_fields),
                                      headers=self.authorization_headers())
         updated_user = User.query.get(1)
 
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
+        self.assertFalse(updated_user.check_password(update_fields.get('password')))
         self.assertTrue(updated_user.check_password(update_fields.get('old_password')))
 
     def test_password_update_fails_with_401_if_old_password_is_incorrect(self):
         self.add_user()
-        update_fields = dict(old_password='wrong_old_password', new_password='new_password',
-                             new_password_confirm='new_password')
+        update_fields = dict(old_password='wrong_old_password', password='new_password',
+                             password_confirm='new_password')
         response = self.client().put('/api/v1/users/1', data=json.dumps(update_fields),
                                      headers=self.authorization_headers())
         result = json.loads(response.data)
@@ -130,14 +130,14 @@ class TestUsersEndpoint(BaseTestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result.get('message'),
-                         "Failed to update user -> Incorrect old password or new passwords don't match.")
-        self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
+                         "Failed to update user -> Incorrect old password.")
+        self.assertFalse(updated_user.check_password(update_fields.get('password')))
         self.assertTrue(updated_user.check_password('test_password'))
 
     def test_password_update_fails_with_401_if_new_password_fields_dont_match(self):
         self.add_user()
-        update_fields = dict(old_password='test_password', new_password='new_password',
-                             new_password_confirm='none_matching_password')
+        update_fields = dict(old_password='test_password', password='new_password',
+                             password_confirm='none_matching_password')
         response = self.client().put('/api/v1/users/1', data=json.dumps(update_fields),
                                      headers=self.authorization_headers())
         result = json.loads(response.data)
@@ -145,6 +145,6 @@ class TestUsersEndpoint(BaseTestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(result.get('message'),
-                         "Failed to update user -> Incorrect old password or new passwords don't match.")
-        self.assertFalse(updated_user.check_password(update_fields.get('new_password')))
+                         "Failed to update user -> New passwords don't match.")
+        self.assertFalse(updated_user.check_password(update_fields.get('password')))
         self.assertTrue(updated_user.check_password('test_password'))
