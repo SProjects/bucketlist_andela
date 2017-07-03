@@ -24,24 +24,28 @@ export class BucketlistItemService {
       .map(response => {
         return response.json() as Item
       })
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'))
+      .catch(this.handleError)
   }
 
   edit(bucketlist_id: number, id: number, payload: any) {
     return this.http.put(this.itemUrl + "bucketlists/" + bucketlist_id + "/items/" + id, payload, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   delete(bucketlist_id: number, id: number) {
     return this.http.delete(this.itemUrl + "bucketlists/" + bucketlist_id + "/items/" + id, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+      .catch(this.handleError);
   }
 
   create(bucketlist_id: number, payload: any) {
     return this.http.post(this.itemUrl + "bucketlists/" + bucketlist_id + "/items", payload, {headers: this.headers})
       .map(response => response.json().message)
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'))
+      .catch(this.handleError)
+  }
+
+  private handleError(error: Response) {
+    return Observable.throw(error.json()['message'] || 'Server error')
   }
 }
