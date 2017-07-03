@@ -40,6 +40,7 @@ export class BucketlistsComponent implements OnInit {
     if (!searchTerm) {
       this.loadBucketlists();
     } else {
+      this.loading = true;
       this.bucketlistService.getAll(null, searchTerm).subscribe(
         response => {
           this.processResponse(response);
@@ -48,6 +49,7 @@ export class BucketlistsComponent implements OnInit {
           this.toast.error(JSON.stringify(error));
         }
       );
+      this.loading = false;
     }
   }
 
@@ -140,18 +142,18 @@ export class BucketlistsComponent implements OnInit {
   private processResponse(response) {
     this.bucketlists = response['bucketlists'];
 
-        if (isUndefined(this.bucketlistService.previous)) {
-          this.hasPrevious = true
-        } else {
-          this.previousUrl = response['previous'];
-          this.hasPrevious = false;
-        }
+    if (isUndefined(this.bucketlistService.previous)) {
+      this.hasPrevious = true
+    } else {
+      this.previousUrl = response['previous'];
+      this.hasPrevious = false;
+    }
 
-        if (isUndefined(this.bucketlistService.next)) {
-          this.hasNext = true
-        } else {
-          this.nextUrl = response['next'];
-          this.hasNext = false;
-        }
+    if (isUndefined(this.bucketlistService.next)) {
+      this.hasNext = true
+    } else {
+      this.nextUrl = response['next'];
+      this.hasNext = false;
+    }
   }
 }

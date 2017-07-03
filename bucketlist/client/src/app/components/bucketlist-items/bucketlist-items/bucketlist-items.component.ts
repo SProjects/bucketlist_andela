@@ -16,6 +16,7 @@ export class BucketlistItemsComponent implements OnInit {
   message: string = null;
   items: Item[];
   bucketlist: Bucketlist = null;
+  loading: boolean = true;
 
   constructor(
     private router: Router,
@@ -30,23 +31,33 @@ export class BucketlistItemsComponent implements OnInit {
   }
 
   private getItems() {
+    this.loading = true;
     let id = +this.route.snapshot.params['id'];
     this.bucketlistService.getBucketlist(id).subscribe(
       bucketlist => {
         this.bucketlist = bucketlist;
-        this.items = bucketlist.items
+        this.items = bucketlist.items;
+        this.loading = false;
+      },
+      error => {
+        this.toast.error(error);
+        this.loading = false;
       }
     );
+
   }
 
   markAsDone(item: Item) {
+    this.loading = true;
     this.itemService.edit(this.bucketlist.id, item.id, {'done': true}).subscribe(
       () => {
         this.toast.success('Hurray! Bucketlist item completed.');
         this.getItems();
+        this.loading = false;
       },
       error => {
         this.toast.error(error);
+        this.loading = false;
       }
     );
   }
@@ -56,13 +67,16 @@ export class BucketlistItemsComponent implements OnInit {
   }
 
   delete(item: Item) {
+    this.loading = true;
     this.itemService.delete(this.bucketlist.id, item.id).subscribe(
       successMessage => {
         this.toast.success(successMessage);
         this.getItems();
+        this.loading = false;
       },
       error => {
         this.toast.error(error);
+        this.loading = false;
       }
     );
   }

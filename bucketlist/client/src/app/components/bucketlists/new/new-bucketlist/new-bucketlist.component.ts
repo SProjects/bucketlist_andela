@@ -12,6 +12,7 @@ import { ToastsManager } from "ng2-toastr/ng2-toastr";
 export class NewBucketlistComponent implements OnInit {
   message: string = null;
   payload: any = {};
+  loading: boolean = true;
 
   constructor(
     private router: Router,
@@ -20,9 +21,11 @@ export class NewBucketlistComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = false;
   }
 
   createBucketlist () {
+    this.loading = true;
     this.bucketlistService.create(this.payload.name).subscribe(
       successMessage => {
         this.toast.success(successMessage);
@@ -32,5 +35,6 @@ export class NewBucketlistComponent implements OnInit {
         this.toast.error(errorMessage);
       }
     );
+    this.loading = false;
   }
 }

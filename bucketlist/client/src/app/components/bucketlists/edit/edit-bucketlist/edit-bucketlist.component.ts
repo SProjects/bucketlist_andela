@@ -13,6 +13,7 @@ export class EditBucketlistComponent implements OnInit{
   id: number = null;
   bucketlist: Bucketlist = null;
   payload: any = {};
+  loading: boolean = true;
 
   constructor(
     private router: Router,
@@ -24,9 +25,11 @@ export class EditBucketlistComponent implements OnInit{
   ngOnInit() {
     this.id = +this.route.snapshot.params['id'];
     this.getBucketlist();
+    this.loading = false;
   }
 
   updateBucketlist () {
+    this.loading = true;
     this.bucketlistService.edit(this.bucketlist.id, this.bucketlist.name).subscribe(
       () => {
         this.toast.success("Bucketlist with ID#" + this.bucketlist.id + " updated successfully");
@@ -36,6 +39,7 @@ export class EditBucketlistComponent implements OnInit{
         this.toast.error(errorMessage);
       }
     );
+    this.loading = false;
   }
 
   private getBucketlist() {

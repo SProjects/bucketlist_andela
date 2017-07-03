@@ -14,6 +14,7 @@ export class AddItemComponent implements OnInit {
   bucketlist_id: number;
   bucketlist: Bucketlist = null;
   model: any = {};
+  loading: boolean = true;
 
   constructor(
     private router: Router,
@@ -26,9 +27,11 @@ export class AddItemComponent implements OnInit {
   ngOnInit() {
     this.bucketlist_id = +this.route.snapshot.params['bucketlist_id'];
     this.getBucketlist();
+    this.loading = false;
   }
 
   createItem() {
+    this.loading = true;
     this.itemService.create(this.bucketlist_id, {"name": this.model.name}).subscribe(
       successMessage => {
         this.toast.success(successMessage);
@@ -38,6 +41,7 @@ export class AddItemComponent implements OnInit {
         this.toast.error(error);
       }
     );
+    this.loading = false;
   }
 
   private getBucketlist() {

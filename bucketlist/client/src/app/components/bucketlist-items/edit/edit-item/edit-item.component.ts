@@ -16,6 +16,7 @@ export class EditItemComponent implements OnInit {
   bucketlist_id: number;
   bucketlist: Bucketlist = null;
   item: Item = null;
+  loading: boolean = true;
 
   constructor(
     private router: Router,
@@ -30,6 +31,7 @@ export class EditItemComponent implements OnInit {
     this.id = +this.route.snapshot.params['id'];
     this.getItem();
     this.getBucketlist();
+    this.loading = false;
   }
 
   update() {

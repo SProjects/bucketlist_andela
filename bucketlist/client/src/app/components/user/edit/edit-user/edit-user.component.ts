@@ -12,6 +12,7 @@ export class EditUserComponent implements OnInit {
   user: User = null;
   successMessage: boolean = false;
   errorMessage: boolean = false;
+  loading: boolean = true;
 
   constructor(
     private userService: UserService,
@@ -23,26 +24,32 @@ export class EditUserComponent implements OnInit {
   }
 
   updateUser() {
+    this.loading = true;
     this.userService.edit(this.user).subscribe(
       user => {
         this.successMessage = true;
         this.toast.success('User successfully updated.');
         this.user = user;
+        this.loading = false;
       },
       error => {
         this.errorMessage = true;
         this.toast.error(error);
+        this.loading = false;
       }
     );
   }
 
   private getUser() {
+    this.loading = true;
     this.userService.getCurrentUser().subscribe(
       user => {
         this.user = user;
+        this.loading = false;
       },
       error => {
         this.toast.error(error);
+        this.loading = false;
       }
     );
   }
