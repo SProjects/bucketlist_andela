@@ -21,6 +21,7 @@ export class BucketlistsComponent implements OnInit {
   hasNext: boolean;
   nextUrl: string;
   loading: boolean = true;
+  selectedBucketlistId: number = null;
 
   constructor(
     private router: Router,
@@ -73,8 +74,8 @@ export class BucketlistsComponent implements OnInit {
     })
   }
 
-  deleteBucketlist(bucketlist: Bucketlist) {
-    this.bucketlistService.destroy(bucketlist.id).subscribe(
+  deleteBucketlist() {
+    this.bucketlistService.destroy(this.selectedBucketlistId).subscribe(
       successMessage => {
         this.toast.success(successMessage);
         this.loadBucketlists();
@@ -83,6 +84,10 @@ export class BucketlistsComponent implements OnInit {
         this.toast.error(JSON.stringify(error));
       }
     );
+  }
+
+  selectBucketlist(id: number){
+    this.selectedBucketlistId = id;
   }
 
   getPrevious() {
