@@ -43,7 +43,8 @@
                         <div class="ui fluid card" [class.grey]="item.done == true"
                              [class.violet]="item.done == false">
                             <div class="content">
-                                <i class="right floated trash black icon" (click)="delete(item)"></i>
+                                <i class="right floated trash black icon confirm-item-delete"
+                                   (click)="selectItem(item.id)"></i>
                                 <i class="right floated edit black icon" *ngIf="item.done == false"
                                    (click)="updateItem(item)"></i>
                                 <i class="right floated check green icon" *ngIf="item.done == false"
@@ -62,4 +63,15 @@
 
         </div>
     </div>
+</div>
+
+<div class="ui modal" id="confirm-delete-item-modal">
+  <div class="header">Confirm Bucketlist Item Deletion</div>
+  <div class="content">
+    <p>Are you sure you want to delete this item?</p>
+  </div>
+  <div class="actions">
+    <div class="ui approve violet button" (click)="delete()">Confirm</div>
+    <div class="ui cancel red button">Cancel</div>
+  </div>
 </div>

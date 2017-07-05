@@ -17,6 +17,7 @@ export class BucketlistItemsComponent implements OnInit {
   items: Item[];
   bucketlist: Bucketlist = null;
   loading: boolean = true;
+  selectedItemId: number = null;
 
   constructor(
     private router: Router,
@@ -47,6 +48,10 @@ export class BucketlistItemsComponent implements OnInit {
 
   }
 
+  selectItem(id: number) {
+    this.selectedItemId = id;
+  }
+
   markAsDone(item: Item) {
     this.loading = true;
     this.itemService.edit(this.bucketlist.id, item.id, {'done': true}).subscribe(
@@ -66,9 +71,9 @@ export class BucketlistItemsComponent implements OnInit {
     this.router.navigate(['/bucketlists/' + this.bucketlist.id + '/edit-item/' + item.id]);
   }
 
-  delete(item: Item) {
+  delete() {
     this.loading = true;
-    this.itemService.delete(this.bucketlist.id, item.id).subscribe(
+    this.itemService.delete(this.bucketlist.id, this.selectedItemId).subscribe(
       successMessage => {
         this.toast.success(successMessage);
         this.getItems();
