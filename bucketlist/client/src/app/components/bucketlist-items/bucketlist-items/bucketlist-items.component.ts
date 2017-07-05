@@ -6,6 +6,7 @@ import { BucketlistService } from "../../../services/bucketlist.service";
 import { Bucketlist } from "../../../models/bucketlist.model";
 import { BucketlistItemService } from "../../../services/bucketlist-item.service";
 import { ToastsManager } from "ng2-toastr";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: 'app-bucketlist-items',
@@ -24,11 +25,13 @@ export class BucketlistItemsComponent implements OnInit {
     private route: ActivatedRoute,
     private bucketlistService: BucketlistService,
     private itemService: BucketlistItemService,
+    private userService: UserService,
     public toast: ToastsManager
   ) { }
 
   ngOnInit() {
     this.getItems();
+    this.userService.getCurrentUser().subscribe();
   }
 
   private getItems() {
