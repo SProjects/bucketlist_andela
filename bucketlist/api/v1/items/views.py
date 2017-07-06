@@ -35,7 +35,7 @@ class ItemEndpoint(Resource):
     @marshal_with(item_fields)
     def put(self, bucketlist_id, item_id):
         arguments = request.get_json(force=True)
-        name, done = arguments.get('name') or None, arguments.get('done') or None
+        name, done = arguments.get('name') or None, arguments.get('done')
 
         bucketlist = Bucketlist.query.filter_by(id=bucketlist_id, user=g.user).first()
         if bucketlist is None:

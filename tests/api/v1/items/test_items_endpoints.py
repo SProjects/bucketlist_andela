@@ -74,6 +74,20 @@ class TestItemsEndpoints(BaseTestCase):
         actual_results = [result.get('name'), result.get('done')]
         self.assertListEqual(actual_results, ['Updated ToDo Item', True])
 
+    def test_edit_can_update_the_status_of_a_bucketlist_item_from_complete_to_incomplete(self):
+        self.add_user()
+        self.add_bucketlists()
+        complete_item = Item(name='ToDo One', bucketlist_id=1, done=True)
+        complete_item.save()
+
+        update_item_fields = {'done': False}
+        response = self.client().put('/api/v1/bucketlists/1/items/1', data=json.dumps(update_item_fields),
+                                     headers=self.authorization_headers())
+        result = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(result.get('done'))
+
     def test_delete_removes_item_from_bucketlist(self):
         self.add_user()
         self.add_bucketlists()
