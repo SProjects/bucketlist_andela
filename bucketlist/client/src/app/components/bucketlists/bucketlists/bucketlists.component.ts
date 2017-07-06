@@ -69,12 +69,14 @@ export class BucketlistsComponent implements OnInit {
           },
           error => {
             this.toast.error(JSON.stringify(error));
+            this.loading = false;
           }
         )
     })
   }
 
   deleteBucketlist() {
+    this.loading = true;
     this.bucketlistService.destroy(this.selectedBucketlistId).subscribe(
       successMessage => {
         this.toast.success(successMessage);
@@ -82,6 +84,7 @@ export class BucketlistsComponent implements OnInit {
       },
       error => {
         this.toast.error(JSON.stringify(error));
+        this.loading = false;
       }
     );
   }
@@ -91,23 +94,29 @@ export class BucketlistsComponent implements OnInit {
   }
 
   getPrevious() {
+    this.loading = true;
     this.bucketlistService.navigate(this.previousUrl).subscribe(
       response => {
         this.processResponse(response);
+        this.loading = false;
       },
       error => {
         this.toast.error(JSON.stringify(error));
+        this.loading = false;
       }
     );
   }
 
   getNext() {
+    this.loading = true;
     this.bucketlistService.navigate(this.nextUrl).subscribe(
       response => {
         this.processResponse(response);
+        this.loading = false;
       },
       error => {
         this.toast.error(JSON.stringify(error));
+        this.loading = false;
       }
     );
   }

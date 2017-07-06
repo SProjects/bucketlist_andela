@@ -27,12 +27,13 @@ export class EditUserComponent implements OnInit {
       user => {
         this.toast.success('User successfully updated.');
         this.user = user;
+        this.loading = false;
       },
       error => {
         this.toast.error(error);
+        this.loading = false;
       }
     );
-    this.loading = false;
   }
 
   private getUser() {
@@ -40,11 +41,12 @@ export class EditUserComponent implements OnInit {
     this.userService.getCurrentUser().subscribe(
       user => {
         this.user = user;
+        this.loading = false;
       },
       error => {
         this.toast.error(error);
+        this.loading = false;
       }
     );
-    this.loading = false;
   }
 }

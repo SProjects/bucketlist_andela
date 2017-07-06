@@ -30,17 +30,18 @@ export class NewBucketlistComponent implements OnInit {
     if (this.validateFields()) {
       this.bucketlistService.create(this.payload.name).subscribe(
         successMessage => {
+          this.loading = false;
           this.toast.success(successMessage);
           this.router.navigate(['/bucketlists']);
         },
         errorMessage => {
           this.toast.error(errorMessage);
+          this.loading = false;
         }
       );
     } else {
       this.toast.error('Bucketlist name is required.');
     }
-    this.loading = false;
   }
 
   private validateFields() {

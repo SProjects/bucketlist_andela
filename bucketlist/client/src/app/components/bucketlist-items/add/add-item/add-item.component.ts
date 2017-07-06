@@ -35,17 +35,18 @@ export class AddItemComponent implements OnInit {
     if (this.validateFields()) {
       this.itemService.create(this.bucketlist_id, {"name": this.model.name}).subscribe(
         successMessage => {
+          this.loading = false;
           this.toast.success(successMessage);
           this.router.navigate(['/bucketlists/' + this.bucketlist_id + '/items']);
         },
         error => {
           this.toast.error(error);
+          this.loading = false;
         }
       );
     } else {
       this.toast.error('Item name is required.');
     }
-    this.loading = false;
   }
 
   private getBucketlist() {
@@ -53,12 +54,13 @@ export class AddItemComponent implements OnInit {
     this.bucketlistService.getBucketlist(this.bucketlist_id).subscribe(
       bucketlist => {
         this.bucketlist = bucketlist;
+        this.loading = false;
       },
       error => {
         this.toast.error(error);
+        this.loading = false;
       }
     );
-    this.loading = false;
   }
 
   private validateFields() {
