@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from "../../../models/user.model";
-import {UserService} from "../../../services/user.service";
-import {Router} from "@angular/router";
+import { UserService } from "../../../services/user.service";
+import { Router } from "@angular/router";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-registration-form',
@@ -14,7 +14,8 @@ export class RegistrationFormComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    public toast: ToastsManager
   ) { }
 
   ngOnInit() {
@@ -22,12 +23,12 @@ export class RegistrationFormComponent implements OnInit {
 
   createUser() {
     this.userService.create(this.model).subscribe(
-      success => {
-        this.message = success;
+      successMessage => {
+        this.toast.success(successMessage);
         this.router.navigate(['/login']);
       },
       error => {
-        this.message = error;
+        this.toast.error(error);
       }
     );
   }
