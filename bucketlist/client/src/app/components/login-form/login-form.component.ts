@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { AuthenticationService } from "../../services/authentication.service";
-import { isUndefined } from "util";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
-import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-login-form',
@@ -12,7 +10,10 @@ import {isNullOrUndefined} from "util";
   styleUrls: ['./login-form.component.css']
 })
 export class LoginFormComponent implements OnInit{
-  payload: any = {};
+  payload: any = {
+    email: '',
+    password: ''
+  };
   message: string = null;
 
   constructor(
