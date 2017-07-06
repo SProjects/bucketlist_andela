@@ -47,9 +47,10 @@
                                    (click)="selectItem(item.id)"></i>
                                 <i class="right floated edit black icon" *ngIf="item.done == false"
                                    (click)="updateItem(item)"></i>
-                                <i class="right floated check green icon" *ngIf="item.done == false"
-                                   (click)="markAsDone(item)"></i>
-                                <i class="right floated check grey icon" *ngIf="item.done == true"></i>
+                                <i class="right floated check green icon confirm-item-complete"
+                                   *ngIf="item.done == false" (click)="selectItem(item.id)"></i>
+                                <i class="right floated check grey icon confirm-item-incomplete"
+                                   *ngIf="item.done == true" (click)="selectItem(item.id)"></i>
                                 <div class="header">{{ item.name }}</div>
                                 <div class="description">
                                     Created {{ item.date_created | amTimeAgo }}
@@ -65,6 +66,7 @@
     </div>
 </div>
 
+<!--Delete Item modal-->
 <div class="ui modal" id="confirm-delete-item-modal">
   <div class="header">Confirm Bucketlist Item Deletion</div>
   <div class="content">
@@ -72,6 +74,30 @@
   </div>
   <div class="actions">
     <div class="ui approve violet button" (click)="delete()">Confirm</div>
+    <div class="ui cancel red button">Cancel</div>
+  </div>
+</div>
+
+<!--Mark Item as done-->
+<div class="ui modal" id="confirm-complete-item-modal">
+  <div class="header">Confirm Bucketlist Item Completion</div>
+  <div class="content">
+    <p>Are you sure this item is complete?</p>
+  </div>
+  <div class="actions">
+    <div class="ui approve violet button" (click)="markAsDone()">Confirm</div>
+    <div class="ui cancel red button">Cancel</div>
+  </div>
+</div>
+
+<!--Mark Item as undone-->
+<div class="ui modal" id="confirm-incomplete-item-modal">
+  <div class="header">Undo Bucketlist Item Completion</div>
+  <div class="content">
+    <p>Are you sure want to mark this item as undone?</p>
+  </div>
+  <div class="actions">
+    <div class="ui approve violet button" (click)="markAsUnDone()">Confirm</div>
     <div class="ui cancel red button">Cancel</div>
   </div>
 </div>

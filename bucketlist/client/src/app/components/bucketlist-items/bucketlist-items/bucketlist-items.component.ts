@@ -55,11 +55,19 @@ export class BucketlistItemsComponent implements OnInit {
     this.selectedItemId = id;
   }
 
-  markAsDone(item: Item) {
+  markAsDone() {
+    this.updateStatus(true, 'Hurray! Bucketlist item completed.')
+  }
+
+  markAsUnDone() {
+    this.updateStatus(false, 'Bucketlist item marked as undone.')
+  }
+
+  private updateStatus(status: boolean, successMessage: string) {
     this.loading = true;
-    this.itemService.edit(this.bucketlist.id, item.id, {'done': true}).subscribe(
+    this.itemService.edit(this.bucketlist.id, this.selectedItemId, {'done': status}).subscribe(
       () => {
-        this.toast.success('Hurray! Bucketlist item completed.');
+        this.toast.success(successMessage);
         this.getItems();
         this.loading = false;
       },
