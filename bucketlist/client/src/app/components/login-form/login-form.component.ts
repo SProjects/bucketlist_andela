@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { AuthenticationService } from "../../services/authentication.service";
-import {isUndefined} from "util";
+import { isUndefined } from "util";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import {isNullOrUndefined} from "util";
 
 @Component({
   selector: 'app-login-form',
@@ -15,7 +17,8 @@ export class LoginFormComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    public toast: ToastsManager
   ) {}
 
   ngOnInit(){
@@ -33,20 +36,20 @@ export class LoginFormComponent implements OnInit{
 
             if (typeof errorMessage.message === 'object') {
               for (let key in errorMessage.message) {
-                this.message = errorMessage.message[key];
+                this.toast.error(errorMessage.message[key]);
               }
             } else {
-              this.message = errorMessage.message;
+              this.toast.error(errorMessage.message);
             }
           }
         );
     } else {
-      this.message = 'Email and Password are required.'
+      this.toast.error('Email and Password are required.');
     }
   }
 
   private validateCredentials() {
-    return !(isUndefined(this.payload.email) || isUndefined(this.payload.password));
+    return (this.payload.email.length > 0 && this.payload.password.length > 0);
   }
 
 }
