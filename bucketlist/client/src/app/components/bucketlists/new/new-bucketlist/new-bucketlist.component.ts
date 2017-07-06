@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BucketlistService } from "../../../../services/bucketlist.service";
 import { Router } from "@angular/router";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import { isUndefined } from "util";
 
 @Component({
   selector: 'app-new-bucketlist',
@@ -26,15 +27,23 @@ export class NewBucketlistComponent implements OnInit {
 
   createBucketlist () {
     this.loading = true;
-    this.bucketlistService.create(this.payload.name).subscribe(
-      successMessage => {
-        this.toast.success(successMessage);
-        this.router.navigate(['/bucketlists']);
-      },
-      errorMessage => {
-        this.toast.error(errorMessage);
-      }
-    );
+    if (this.validateFields()) {
+      this.bucketlistService.create(this.payload.name).subscribe(
+        successMessage => {
+          this.toast.success(successMessage);
+          this.router.navigate(['/bucketlists']);
+        },
+        errorMessage => {
+          this.toast.error(errorMessage);
+        }
+      );
+    } else {
+      this.toast.error('Bucketlist name is required.');
+    }
     this.loading = false;
+  }
+
+  private validateFields() {
+    return !isUndefined(this.payload.name);
   }
 }

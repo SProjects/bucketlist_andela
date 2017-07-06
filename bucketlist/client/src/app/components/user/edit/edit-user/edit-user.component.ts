@@ -10,8 +10,6 @@ import { ToastsManager } from "ng2-toastr/ng2-toastr";
 })
 export class EditUserComponent implements OnInit {
   user: User = null;
-  successMessage: boolean = false;
-  errorMessage: boolean = false;
   loading: boolean = true;
 
   constructor(
@@ -27,17 +25,14 @@ export class EditUserComponent implements OnInit {
     this.loading = true;
     this.userService.edit(this.user).subscribe(
       user => {
-        this.successMessage = true;
         this.toast.success('User successfully updated.');
         this.user = user;
-        this.loading = false;
       },
       error => {
-        this.errorMessage = true;
         this.toast.error(error);
-        this.loading = false;
       }
     );
+    this.loading = false;
   }
 
   private getUser() {
@@ -45,12 +40,11 @@ export class EditUserComponent implements OnInit {
     this.userService.getCurrentUser().subscribe(
       user => {
         this.user = user;
-        this.loading = false;
       },
       error => {
         this.toast.error(error);
-        this.loading = false;
       }
     );
+    this.loading = false;
   }
 }

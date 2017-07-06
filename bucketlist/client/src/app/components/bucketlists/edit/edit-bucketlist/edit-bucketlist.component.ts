@@ -25,15 +25,31 @@ export class EditBucketlistComponent implements OnInit{
   ngOnInit() {
     this.id = +this.route.snapshot.params['id'];
     this.getBucketlist();
-    this.loading = false;
   }
 
   updateBucketlist () {
     this.loading = true;
-    this.bucketlistService.edit(this.bucketlist.id, this.bucketlist.name).subscribe(
-      () => {
-        this.toast.success("Bucketlist with ID#" + this.bucketlist.id + " updated successfully");
-        this.router.navigate(['/bucketlists']);
+    if (this.validateFields()) {
+      this.bucketlistService.edit(this.bucketlist.id, this.bucketlist.name).subscribe(
+        () => {
+          this.toast.success("Bucketlist with ID#" + this.bucketlist.id + " updated successfully");
+          this.router.navigate(['/bucketlists']);
+        },
+        errorMessage => {
+          this.toast.error(errorMessage);
+        }
+      );
+    } else {
+      this.toast.error("Bucketlist name is required.");
+    }
+    this.loading = false;
+  }
+
+  private getBucketlist() {
+    this.loading = true;
+    this.bucketlistService.getBucketlist(this.id).subscribe(
+      bucketlist => {
+        this.bucketlist = bucketlist;
       },
       errorMessage => {
         this.toast.error(errorMessage);
@@ -42,14 +58,7 @@ export class EditBucketlistComponent implements OnInit{
     this.loading = false;
   }
 
-  private getBucketlist() {
-    this.bucketlistService.getBucketlist(this.id).subscribe(
-      bucketlist => {
-        this.bucketlist = bucketlist;
-      },
-      errorMessage => {
-        this.toast.error(errorMessage);
-      }
-    )
+  private validateFields() {
+    return this.bucketlist.name.length > 0;
   }
 }

@@ -31,22 +31,28 @@ export class EditItemComponent implements OnInit {
     this.id = +this.route.snapshot.params['id'];
     this.getItem();
     this.getBucketlist();
-    this.loading = false;
   }
 
   update() {
-    this.itemService.edit(this.bucketlist_id, this.id, {'name': this.item.name}).subscribe(
-      () => {
-        this.toast.success("Bucketlist item updated successfully.");
-        this.router.navigate(['/bucketlists/' + this.bucketlist_id + '/items']);
-      },
-      error => {
-        this.toast.error(error);
-      }
-    );
+    this.loading = true;
+    if (this.validateFields()) {
+      this.itemService.edit(this.bucketlist_id, this.id, {'name': this.item.name}).subscribe(
+        () => {
+          this.toast.success("Bucketlist item updated successfully.");
+          this.router.navigate(['/bucketlists/' + this.bucketlist_id + '/items']);
+        },
+        error => {
+          this.toast.error(error);
+        }
+      );
+    } else {
+      this.toast.error("Item name is required.");
+    }
+    this.loading = false;
   }
 
   private getItem() {
+    this.loading = true;
     this.itemService.getItem(this.bucketlist_id, this.id).subscribe(
       item => {
         this.item = item;
@@ -55,9 +61,11 @@ export class EditItemComponent implements OnInit {
         this.toast.error(error);
       }
     );
+    this.loading = false;
   }
 
   private getBucketlist() {
+    this.loading = true;
     this.bucketlistService.getBucketlist(this.bucketlist_id).subscribe(
       bucketlist => {
         this.bucketlist = bucketlist;
@@ -66,5 +74,10 @@ export class EditItemComponent implements OnInit {
         this.toast.error(error);
       }
     );
+    this.loading = false;
+  }
+
+  private validateFields() {
+    return this.item.name.length > 0;
   }
 }
