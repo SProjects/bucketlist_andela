@@ -4,6 +4,7 @@
             <div class="ui centered padded grid">
                 <div class="four wide column">
                     <div *ngIf="!!message" class="ui error message">
+                        <i class="close icon"></i>
                         {{ message }}
                     </div>
                     <form class="ui four wide column form segment" (ngSubmit)="login()">
