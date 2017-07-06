@@ -16,6 +16,7 @@ def create_app(env_name):
                 static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'client/static'))
     app.config.from_object(configuration[env_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.url_map.strict_slashes = False
     db.init_app(app)
 
     from main.views import main as main_blueprint
