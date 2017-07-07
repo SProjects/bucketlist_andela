@@ -42,7 +42,13 @@
             </div>
 
             <div class="row">
-                <div class="column">
+                <div class="sixteen wide column" *ngIf="bucketlists && bucketlists.length == 0">
+                    <div class="ui basic message">
+                        No bucketlists to display.
+                    </div>
+                </div>
+
+                <div class="column" *ngIf="bucketlists">
                     <div *ngFor="let bucketlist of bucketlists" class="ui clearing purple segment">
                         <div class="ui grid">
                             <div class="row">
