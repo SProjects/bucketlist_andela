@@ -6,8 +6,7 @@ import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-login-form',
-  templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.css']
+  templateUrl: './login-form.component.html'
 })
 export class LoginFormComponent {
   payload: any = {

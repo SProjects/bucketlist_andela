@@ -7,8 +7,7 @@ import { isUndefined } from "util";
 
 @Component({
   selector: 'app-new-bucketlist',
-  templateUrl: './new-bucketlist.component.html',
-  styleUrls: ['./new-bucketlist.component.css']
+  templateUrl: './new-bucketlist.component.html'
 })
 export class NewBucketlistComponent implements OnInit {
   message: string = null;

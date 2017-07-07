@@ -6,8 +6,7 @@ import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-edit-bucketlist',
-  templateUrl: './edit-bucketlist.component.html',
-  styleUrls: ['./edit-bucketlist.component.css']
+  templateUrl: './edit-bucketlist.component.html'
 })
 export class EditBucketlistComponent implements OnInit{
   id: number = null;

@@ -8,8 +8,7 @@ import { isUndefined } from "util";
 
 @Component({
   selector: 'app-add-item',
-  templateUrl: './add-item.component.html',
-  styleUrls: ['./add-item.component.css']
+  templateUrl: './add-item.component.html'
 })
 export class AddItemComponent implements OnInit {
   bucketlist_id: number;

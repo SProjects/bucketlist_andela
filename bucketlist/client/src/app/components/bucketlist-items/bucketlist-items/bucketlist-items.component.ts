@@ -10,8 +10,7 @@ import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: 'app-bucketlist-items',
-  templateUrl: './bucketlist-items.component.html',
-  styleUrls: ['./bucketlist-items.component.css']
+  templateUrl: './bucketlist-items.component.html'
 })
 export class BucketlistItemsComponent implements OnInit {
   message: string = null;

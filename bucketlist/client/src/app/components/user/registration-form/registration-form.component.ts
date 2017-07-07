@@ -1,15 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {UserService} from "../../../services/user.service";
-import {Router} from "@angular/router";
-import {ToastsManager} from "ng2-toastr/ng2-toastr";
-import {isUndefined} from "util";
+import { Component } from '@angular/core';
+import { UserService } from "../../../services/user.service";
+import { Router } from "@angular/router";
+import { ToastsManager } from "ng2-toastr/ng2-toastr";
+import { isUndefined } from "util";
 
 @Component({
   selector: 'app-registration-form',
-  templateUrl: './registration-form.component.html',
-  styleUrls: ['./registration-form.component.css']
+  templateUrl: './registration-form.component.html'
 })
-export class RegistrationFormComponent implements OnInit {
+export class RegistrationFormComponent {
   message: string = null;
   model: any = {};
 
@@ -18,9 +17,6 @@ export class RegistrationFormComponent implements OnInit {
     private userService: UserService,
     public toast: ToastsManager
   ) {}
-
-  ngOnInit() {
-  }
 
   createUser() {
     if (this.validateFields()) {

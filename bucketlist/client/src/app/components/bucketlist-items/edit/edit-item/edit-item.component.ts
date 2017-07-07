@@ -8,8 +8,7 @@ import { ToastsManager } from "ng2-toastr/ng2-toastr";
 
 @Component({
   selector: 'app-edit-item',
-  templateUrl: './edit-item.component.html',
-  styleUrls: ['./edit-item.component.css']
+  templateUrl: './edit-item.component.html'
 })
 export class EditItemComponent implements OnInit {
   id: number;

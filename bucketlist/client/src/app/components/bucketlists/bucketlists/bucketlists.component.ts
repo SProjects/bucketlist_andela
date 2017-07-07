@@ -9,8 +9,7 @@ import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: 'app-bucketlists',
-  templateUrl: './bucketlists.component.html',
-  styleUrls: ['./bucketlists.component.css']
+  templateUrl: './bucketlists.component.html'
 })
 export class BucketlistsComponent implements OnInit {
   bucketlists: any = [];
