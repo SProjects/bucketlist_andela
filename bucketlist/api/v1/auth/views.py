@@ -1,3 +1,5 @@
+import re
+
 from flask import g
 from flask import request
 from flask_restful import abort, Resource
@@ -15,6 +17,9 @@ class RegisterUser(Resource):
         first_name, last_name = arguments.get('first_name'), arguments.get('last_name')
         email, password = arguments.get('email'), arguments.get('password')
         password_confirm = arguments.get('password_confirm')
+
+        if not re.match(r'\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?', email):
+            return abort(401, message='Email address is invalid.')
 
         if password != password_confirm:
             return abort(401, message='Password and confirmation password don\'t match')

@@ -30,3 +30,13 @@ class TestRegisterUser(BaseTestCase):
 
         self.assertEqual(response.status_code, 401)
         self.assertEqual(result['message'], 'Password and confirmation password don\'t match')
+
+    def test_user_registration_fails_with_401_error_if_email_is_invalid(self):
+        user_data = {'first_name': 'First', 'last_name': 'Last', 'email': 'first@com',
+                     'password': 'test_password', 'password_confirm': 'test_password'}
+
+        response = self.client().post('/api/v1/auth/register', data=json.dumps(user_data))
+        result = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(result['message'], 'Email address is invalid.')
