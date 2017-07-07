@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from "@angular/router";
 
 import { AuthenticationService } from "../../services/authentication.service";
@@ -9,21 +9,17 @@ import { ToastsManager } from "ng2-toastr/ng2-toastr";
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.css']
 })
-export class LoginFormComponent implements OnInit{
+export class LoginFormComponent {
   payload: any = {
     email: '',
     password: ''
   };
-  message: string = null;
 
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
     public toast: ToastsManager
   ) {}
-
-  ngOnInit(){
-  }
 
   login (){
     if (this.validateCredentials()) {
