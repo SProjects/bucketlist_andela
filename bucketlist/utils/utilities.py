@@ -1,3 +1,5 @@
+import re
+
 from flask import g
 from flask_restful import abort
 
@@ -31,3 +33,6 @@ def verify_token(token):
     user = User.query.get(data.get('id'))
     return user
 
+
+def validate_email(email):
+    return re.match(r'\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?', email)

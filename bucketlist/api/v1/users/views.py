@@ -6,6 +6,7 @@ from sqlalchemy import desc
 from bucketlist.models.user import User
 from bucketlist import auth
 from bucketlist.errors.user import PasswordError
+from bucketlist.utils.utilities import validate_email
 
 user_fields = {
     'id': fields.Integer,
@@ -44,6 +45,9 @@ class UserEndpoint(Resource):
         email = arguments.get('email') or None
         old_password, new_password = arguments.get('old_password') or None, arguments.get('password') or None
         new_password_confirm = arguments.get('password_confirm') or None
+
+        if email is not None and not validate_email(email):
+            return abort(401, message='Email address is invalid.')
 
         current_user = g.user
         if current_user.id == user_id:

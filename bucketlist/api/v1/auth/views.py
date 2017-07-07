@@ -7,7 +7,7 @@ from itsdangerous import SignatureExpired, BadSignature
 
 from bucketlist import auth
 from bucketlist.models.user import User
-from bucketlist.utils.utilities import validate, verify_token
+from bucketlist.utils.utilities import validate, verify_token, validate_email
 
 
 class RegisterUser(Resource):
@@ -18,7 +18,7 @@ class RegisterUser(Resource):
         email, password = arguments.get('email'), arguments.get('password')
         password_confirm = arguments.get('password_confirm')
 
-        if not re.match(r'\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?', email):
+        if not validate_email(email):
             return abort(401, message='Email address is invalid.')
 
         if password != password_confirm:
