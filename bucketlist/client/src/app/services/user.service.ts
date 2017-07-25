@@ -38,6 +38,7 @@ export class UserService {
   }
 
   edit(user: User): Observable<User> {
+    this.headers = this.util.getAuthHeaders();
     return this.http.put(this.config.apiV1Url + 'users/' + user.id, user, {headers: this.headers})
       .map(response => {
         return response.json()
