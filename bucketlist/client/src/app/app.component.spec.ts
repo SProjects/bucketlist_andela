@@ -10,7 +10,6 @@ import { NewBucketlistComponent } from "./components/bucketlists/new/new-bucketl
 import { EditBucketlistComponent } from "./components/bucketlists/edit/edit-bucketlist/edit-bucketlist.component";
 import { BucketlistItemsComponent } from "./components/bucketlist-items/bucketlist-items/bucketlist-items.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
-import { HeaderDirective } from "./directive/header/header.directive";
 import { EditItemComponent } from "./components/bucketlist-items/edit/edit-item/edit-item.component";
 import { AddItemComponent } from "./components/bucketlist-items/add/add-item/add-item.component";
 import { EditUserComponent } from "./components/user/edit/edit-user/edit-user.component";
@@ -27,6 +26,7 @@ import { Utilities } from "./utilities/utilities";
 import { CanAccessRouteGuard } from "./guards/can-access-route.guard";
 import { CanAccessLoginGuard } from "./guards/can-access-login.guard";
 import { AppConfig } from "./app.config";
+import { HeaderComponent } from "./components/header/header.component";
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -45,7 +45,7 @@ describe('AppComponent', () => {
         RegistrationFormComponent,
         PageNotFoundComponent,
         BucketlistsComponent,
-        HeaderDirective,
+        HeaderComponent,
         EditBucketlistComponent,
         NewBucketlistComponent,
         BucketlistItemsComponent,
