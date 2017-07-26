@@ -6,9 +6,9 @@ import { AuthenticationService } from "../../services/authentication.service";
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.directive.html'
+  templateUrl: 'header.component.html'
 })
-export class HeaderDirective implements OnInit {
+export class HeaderComponent implements OnInit {
   title = 'BUCKETLIST';
 
   public currentUser = null;
@@ -27,7 +27,6 @@ export class HeaderDirective implements OnInit {
       this.currentUser = user;
     })
   }
-
 
   activeUser() {
     return this.authService.isLoggedIn();

@@ -44,6 +44,6 @@ export class NewBucketlistComponent implements OnInit {
   }
 
   private validateFields() {
-    return !isUndefined(this.payload.name);
+    return this.payload.name.length > 0;
   }
 }
