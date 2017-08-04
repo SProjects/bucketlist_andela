@@ -19,7 +19,6 @@ import { BucketlistsComponent } from './components/bucketlists/bucketlists/bucke
 import { BucketlistService} from "./services/bucketlist.service";
 import { UserService} from "./services/user.service";
 import { Utilities} from "./utilities/utilities";
-import { HeaderDirective } from './directive/header/header.directive';
 import { EditBucketlistComponent } from './components/bucketlists/edit/edit-bucketlist/edit-bucketlist.component';
 import { NewBucketlistComponent } from './components/bucketlists/new/new-bucketlist/new-bucketlist.component';
 import { BucketlistItemsComponent } from './components/bucketlist-items/bucketlist-items/bucketlist-items.component';
@@ -29,6 +28,7 @@ import { AddItemComponent } from './components/bucketlist-items/add/add-item/add
 import { EditUserComponent } from './components/user/edit/edit-user/edit-user.component';
 import { CanAccessRouteGuard } from "./guards/can-access-route.guard";
 import { CanAccessLoginGuard } from "./guards/can-access-login.guard";
+import { HeaderComponent } from "./components/header/header.component";
 
 @NgModule({
   declarations: [
@@ -37,7 +37,7 @@ import { CanAccessLoginGuard } from "./guards/can-access-login.guard";
     RegistrationFormComponent,
     PageNotFoundComponent,
     BucketlistsComponent,
-    HeaderDirective,
+    HeaderComponent,
     EditBucketlistComponent,
     NewBucketlistComponent,
     BucketlistItemsComponent,

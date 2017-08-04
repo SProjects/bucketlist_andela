@@ -4,7 +4,6 @@ import { BucketlistItemService } from "../../../../services/bucketlist-item.serv
 import { Bucketlist } from "../../../../models/bucketlist.model";
 import { BucketlistService } from "../../../../services/bucketlist.service";
 import { ToastsManager } from "ng2-toastr/ng2-toastr";
-import { isUndefined } from "util";
 
 @Component({
   selector: 'app-add-item',
@@ -63,6 +62,6 @@ export class AddItemComponent implements OnInit {
   }
 
   private validateFields() {
-    return !isUndefined(this.model.name);
+    return this.model.name.length > 0;
   }
 }
