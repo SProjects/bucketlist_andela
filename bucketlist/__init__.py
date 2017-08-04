@@ -4,6 +4,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
+from flask_cors import CORS
 
 from .config import configuration
 
@@ -14,6 +15,7 @@ auth = HTTPBasicAuth()
 def create_app(env_name):
     app = Flask(__name__, static_url_path='/static',
                 static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'client/static'))
+    CORS(app)
     app.config.from_object(configuration[env_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.url_map.strict_slashes = False
