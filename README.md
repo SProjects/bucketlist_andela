@@ -390,3 +390,19 @@ Authorization: True
 
 ##### Run tests with coverage
 `nosetests --rednose --with-coverage --cover-inclusive --cover-package=bucketlist --cover-erase --cover-html`
+
+## Dockerize Bucketlist
+
+##### Pre-requisites
+- Docker (Install [Docker for Mac](https://docs.docker.com/docker-for-mac/install/) or [Docker for Windows](https://docs.docker.com/docker-for-windows/install/))  
+
+##### Frontend, API/Backend, Database/Postgres (separate)
+- Clone the react frontend `git clone https://github.com/SProjects/react_bucketlist.git`  
+- `cd react_bucketlist`  
+- `docker build -t=frontend -f .docker/development.docker` | `frontend` can be replaced with whatever name you want.  
+- `docker-compose up --build` | This will build all the api, database and frontend containers and wire them up.  
+- Visit http://127.0.0.1:3000 to see the application  
+
+##### Hybrid (Frontend + Backend)
+- `docker-compose -f docker-compose.hybrid.yml up --build`  
+- Visit http://127.0.0.1:5000 to see the application  
