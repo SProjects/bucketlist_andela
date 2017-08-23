@@ -1,0 +1,10 @@
+FROM beevelop/nodejs-python:latest
+
+MAINTAINER Sebuuma Daniel <sedzsoft@gmail.com>
+
+RUN apt-get update -y
+RUN apt-get install -y libpq-dev
+
+COPY . /usr/src
+WORKDIR /usr/src
+RUN pip install -r requirements.txt

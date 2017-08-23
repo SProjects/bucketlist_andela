@@ -1,0 +1,34 @@
+version: "2.1"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile.hybrid
+    volumes:
+      - .:/usr/src
+    ports:
+      - "5000:5000"
+    depends_on:
+      database:
+        condition: service_healthy
+    links:
+      - database
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@database:5432/bucketlist_dev
+    entrypoint: ["./.docker/init-hybrid.sh"]
+  database:
+    restart: always
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=bucketlist_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "psql -h 'localhost' -U 'postgres' -c '\\l'"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    volumes:
+      - ./.docker/data:/var/lib/postgresql/data
