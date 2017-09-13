@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:2.7.10
+        environment:
+          BUCKETLIST_ENV: testing
+          DATABASE_URL: postgresql://ubuntu@localhost/bucketlist_test
+      - image: circleci/postgres:9.4.5
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: bucketlist_test
+          POSTGRES_PASSWORD: ""
+
+    working_directory: ~/app
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            cd app
+            pip install --upgrade virtualenv
+            virtualenv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            nodetest --rednose
