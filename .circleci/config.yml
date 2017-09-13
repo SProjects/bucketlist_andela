@@ -37,4 +37,4 @@ jobs:
           name: run tests
           command: |
             source venv/bin/activate
-            nodetest --rednose
+            nosetests --rednose
