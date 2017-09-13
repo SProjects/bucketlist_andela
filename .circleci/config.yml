@@ -24,10 +24,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            cd app
-            pip install --upgrade virtualenv
-            virtualenv venv
-            . venv/bin/activate
+            virtualenv --no-site-packages venv
+            source venv/bin/activate
             pip install -r requirements.txt
 
       - save_cache:
@@ -38,5 +36,5 @@ jobs:
       - run:
           name: run tests
           command: |
-            . venv/bin/activate
+            source venv/bin/activate
             nodetest --rednose
