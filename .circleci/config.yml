@@ -6,11 +6,6 @@ jobs:
         environment:
           BUCKETLIST_ENV: testing
           DATABASE_URL: postgresql://circleci@localhost/bucketlist_test
-      - image: circleci/postgres:9.4-alpine
-        environment:
-          POSTGRES_USER: circleci
-          POSTGRES_DB: bucketlist_test
-          POSTGRES_PASSWORD: ""
 
     working_directory: ~/app
 
@@ -47,6 +42,11 @@ jobs:
     working_directory: ~/app
 
     steps:
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          - v1-dependencies-
+          
       - run:
           name: run tests
           command: |
