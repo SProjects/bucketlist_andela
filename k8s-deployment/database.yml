@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bucketlist-db
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: bucketlist-db
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bucketlist-db
+spec:
+  selector:
+    matchLabels:
+      app: bucketlist-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: bucketlist-db
+    spec:
+      containers:
+      - image: postgres:9.6
+        name: bucketlist-db
+        env:
+        - name: POSTGRES_DB
+          value: bucketlist_dev
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: postgres
+        ports:
+        - containerPort: 5432
+          name: bucketlist-db
+        volumeMounts:
+        - name: postgres-persistent-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-persistent-storage
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim

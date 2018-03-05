@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bucketlist-web-app
+  labels:
+    app: bucketlist-web-app
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      protocol: TCP
+  selector:
+    app: bucketlist-web-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bucketlist-web-app
+  labels:
+    app: bucketlist-web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: bucketlist-web-app
+  template:
+    metadata:
+      labels:
+        app: bucketlist-web-app
+    spec:
+      containers:
+        - name: bucketlist-web-app
+          image: sedzsoft/bucketlist_web
+          imagePullPolicy: IfNotPresent
+          args: ["foreground"]
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:postgres@bucketlist-db.default:5432/bucketlist_dev
+          ports:
+            - containerPort: 5000
