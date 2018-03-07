@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: postgres
+  tag: 9.6
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 5432
+  targetPort: 5432
+
+ingress:
+  enabled: false
+
+volume:
+  name: postgres-persistent-storage
+  mountPath: /var/lib/postgresql/data
+  claimName: postgres-pv-claim
